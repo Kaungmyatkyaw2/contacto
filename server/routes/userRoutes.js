@@ -16,19 +16,16 @@ Router.post(
 Router.post("/verifyEmail/:token", authController.verfiyEmail);
 Router.post("/getVerifyEmailUrl", authController.getVerifyEmailUrl);
 Router.post("/login", authController.login);
-Router.patch(
-  "/updateMyPassword",
-  authController.protect,
-  authController.updateMyPassword
-);
+
+Router.use(authController.protect);
+Router.patch("/updateMyPassword", authController.updateMyPassword);
 Router.patch(
   "/updateMe",
-  authController.protect,
   userImgUploader.uploadLocally("photo"),
   userController.protectUpdateMe,
   userController.updateMe
 );
-
+Router.get("/me", userController.getMe, userController.getUser);
 Router.post("/forgotPassword", authController.forgotPassword);
 Router.post("/resetPassword/:token", authController.resetPassword);
 

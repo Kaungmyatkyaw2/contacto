@@ -53,6 +53,7 @@ const sendErrorProd = (err, res) => {
 };
 
 const handleErrorGlobally = (error, req, res, next) => {
+  console.log(error)
   if (error.name == "ValidationError") error = handleValidationError(error);
   if (error.code == 11000) error = handleDuplicateKeysError(error);
   if (error.name === "JsonWebTokenError") error = handleJWTError();

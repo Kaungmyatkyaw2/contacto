@@ -12,7 +12,6 @@ export const VerifyEmail = () => {
     const handleVerify = async () => {
         try {
             const response = await axiosClient.post(`/users/verifyEmail/${searchParams.get("token")}`);
-            console.log(response)
             navigate("/")
         } catch (error: any) {
             toast({

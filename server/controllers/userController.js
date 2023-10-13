@@ -14,6 +14,8 @@ const filteredObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
+exports.getUser = factory.getOne(User);
+
 exports.protectUpdateMe = (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(new AppError("This route isn't for updating password.", 400));
@@ -25,9 +27,13 @@ exports.protectUpdateMe = (req, res, next) => {
   next();
 };
 exports.updateMe = factory.updateOne(User);
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+};
 
 exports.setUserId = (field) => (req, res, next) => {
   const userId = req.user._id;
   req[field].user = userId;
   next();
-}
+};

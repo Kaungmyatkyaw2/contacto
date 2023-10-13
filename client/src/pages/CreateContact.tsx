@@ -1,3 +1,4 @@
+import { useToast } from '@/components/ui/use-toast'
 import axiosClient from '@/lib/axiosClient'
 import { IconInput } from '@/sharers/form'
 import { LoadingButton } from '@/sharers/other'
@@ -5,6 +6,7 @@ import { emailPattern, setRequired } from '@/utils'
 import { Camera, MailIcon, Phone, Plus, User } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 interface FormValues {
     email: string;
@@ -13,18 +15,22 @@ interface FormValues {
 }
 
 export const CreateContact = () => {
-
     const [previewImage, setPreviewImage] = useState<null | string>(null);
     const [file, setFile] = useState<null | File>(null);
-    const fileRef = useRef<HTMLInputElement>(null)
+    const fileRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate()
+
+    const { toast } = useToast();
+
     const form = useForm<FormValues>();
     const { register, formState, handleSubmit } = form;
     const { errors, isDirty, isValid } = formState;
 
 
     const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e?.target?.files[0]) {
+        if (e.target.files?.length) {
             setPreviewImage(URL.createObjectURL(e.target.files[0] || {}));
+            setFile(e.target.files[0])
         }
     }
 
@@ -32,11 +38,18 @@ export const CreateContact = () => {
 
         try {
             const formData = new FormData();
-            Object.keys({ ...values }).forEach((key) => {
-                formData.append(key, values[key])
-            })
+            formData.append("phoneNumber", values.phoneNumber);
+            formData.append("name", values.name);
+
+            values.email && formData.append("email", values.email);
             file && formData.append("photo", file);
+
             const response = await axiosClient.post("/contacts", formData);
+
+            toast({
+                title: "Successfully create a contact !",
+            })
+            // navigate("/")
         } catch (error) {
             console.log(error)
         }
@@ -61,7 +74,7 @@ export const CreateContact = () => {
                 </LoadingButton>
             </div>
 
-            <form noValidate onSubmit={handleSubmit(onSubmit)} className='w-[500px] pt-[30px] space-y-[35px]'>
+            <form noValidate onSubmit={handleSubmit(onSubmit)} className='sm:w-[530px] w-auto pt-[30px] px-[30px] space-y-[35px]'>
                 <IconInput placeholder='Name' icon={User}
                     isError={errors.name}
                     error={errors.name?.message}
