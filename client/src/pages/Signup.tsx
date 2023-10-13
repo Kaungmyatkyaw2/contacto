@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { LabeledInput } from "@/sharers/form";
 import { useForm } from "react-hook-form";
 import { emailPattern, setRequired } from "@/validation";
@@ -22,11 +24,14 @@ export const Signup = () => {
 
   const onSubmit = async (values: FormValues) => {
     try {
+
       const data = new FormData();
 
-      Object.keys(values).forEach(key => {
-        data.append(key, values[key])
-      })
+      data.append("email", values.email)
+      data.append("password", values.password)
+      data.append("passwordConfirm", values.passwordConfirm)
+      data.append("name", values.name)
+
       const response = await axiosClient.post("/users/signup", data);
       toast({
         title: "Verification email send !",

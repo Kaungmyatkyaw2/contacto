@@ -1,6 +1,6 @@
 import { ContactoIcon, DropDown } from "@/sharers/other"
 import { Button } from "../ui/button"
-import { LogOutIcon, Menu, PersonStanding, Search, SettingsIcon, UserCircle } from "lucide-react"
+import { LogOutIcon, Menu, Search, SettingsIcon, UserCircle } from "lucide-react"
 import { Input } from "../ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useNavigate } from "react-router-dom"

@@ -7,10 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { AuthContext } from "@/context/provider/AuthContextProvider"
 import axiosClient from "@/lib/axiosClient"
-import { Delete, DeleteIcon, Pen } from "lucide-react"
-import { useContext, useEffect, useState } from "react"
+import {  DeleteIcon, Pen } from "lucide-react"
+import {  useEffect, useState } from "react"
 
 interface ContactType {
   email?: string | undefined
@@ -23,7 +22,6 @@ interface ContactType {
 
 export const Home = () => {
 
-  const { state: auth } = useContext(AuthContext);
   const [contacts, setContacts] = useState<ContactType[]>([]);
 
   const fetchSmth = async () => {

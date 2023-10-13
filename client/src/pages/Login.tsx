@@ -1,7 +1,7 @@
 import { LabeledInput } from "@/sharers/form";
 import { useForm } from "react-hook-form";
 import { emailPattern, setRequired } from "@/validation";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/signin_up";
 import axiosClient from "@/lib/axiosClient";
 import { ContactoIcon, LoadingButton } from "@/sharers/other";
@@ -16,7 +16,6 @@ interface FormValues {
 
 export const Login = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const form = useForm<FormValues>();
   const { register, formState, handleSubmit } = form;
   const { errors, isDirty, isValid } = formState;

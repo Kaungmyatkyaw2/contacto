@@ -6,7 +6,6 @@ import { emailPattern, setRequired } from '@/validation'
 import { Camera, MailIcon, Phone, Plus, User } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 
 interface FormValues {
     email: string;
@@ -18,7 +17,6 @@ export const CreateContact = () => {
     const [previewImage, setPreviewImage] = useState<null | string>(null);
     const [file, setFile] = useState<null | File>(null);
     const fileRef = useRef<HTMLInputElement>(null);
-    const navigate = useNavigate()
 
     const { toast } = useToast();
 
@@ -44,7 +42,7 @@ export const CreateContact = () => {
             values.email && formData.append("email", values.email);
             file && formData.append("photo", file);
 
-            const response = await axiosClient.post("/contacts", formData);
+            await axiosClient.post("/contacts", formData);
 
             toast({
                 title: "Successfully create a contact !",
