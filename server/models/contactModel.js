@@ -54,6 +54,9 @@ const ContactSchema = new mongoose.Schema({
 ContactSchema.index({ name: 1, user: 1 }, { unique: true });
 
 ContactSchema.path("labels").validate(function (value) {
+  if (!value.length) {
+    return true;
+  }
   const uniqueLabels = new Set(value.map((label) => label.toString()));
   return uniqueLabels.size === value.length;
 }, "Duplicate label IDs are not allowed.");
