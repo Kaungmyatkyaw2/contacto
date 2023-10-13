@@ -1,6 +1,6 @@
 import { LabeledInput } from "@/sharers/form";
 import { useForm } from "react-hook-form";
-import { emailPattern, setRequired } from "@/utils";
+import { emailPattern, setRequired } from "@/validation";
 import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/signin_up";
 import { ContactoIcon, LoadingButton } from "@/sharers/other";

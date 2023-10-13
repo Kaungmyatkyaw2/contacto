@@ -3,7 +3,12 @@ import { Plus, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import SidebarBtn from './SidebarBtn';
 
-const Sidebar = ({ open }: { open: boolean }) => {
+interface Props {
+    open: boolean
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const Sidebar = ({ open, setOpen }: Props) => {
 
     const navigate = useNavigate();
 
@@ -28,6 +33,7 @@ const Sidebar = ({ open }: { open: boolean }) => {
                 <SidebarBtn icon={User}
                     onClick={() => {
                         navigate("/")
+                        setOpen(false)
                     }}
                 >
                     Contact

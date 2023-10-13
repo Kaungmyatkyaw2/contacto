@@ -1,12 +1,21 @@
 import { createContext, useReducer } from 'react'
 
+
+interface userType {
+  _id: string
+  name: string
+  email: string
+  photo: string
+}
+
 interface stateType {
   token: undefined | string
+  user: userType | null
 }
 
 interface authContextType {
   state: stateType | null;
-  dispatch: React.DispatchWithoutAction | React.Dispatch<{ type: any; token?: string | undefined; }> | any
+  dispatch: React.Dispatch<{ type: any; token?: string | undefined; user?: userType }> | any
 }
 
 export const AuthContext = createContext<authContextType>({
@@ -14,12 +23,24 @@ export const AuthContext = createContext<authContextType>({
   dispatch: null
 });
 
-const reducer = (state: stateType, action: { type: any, token?: string }) => {
+const reducer = (state: stateType, action: { type: any, token?: string, user?: userType }) => {
 
   switch (action.type) {
     case "setToken":
       localStorage.setItem("jwt_token", action.token || "")
       state = { ...state, token: action.token };
+      return state;
+      break;
+
+    case "setUser":
+      state = { ...state, user: action.user || null };
+      return state;
+      break;
+
+
+    case "logOut":
+      localStorage.removeItem("jwt_token")
+      state = { ...state, token: undefined, user: null };
       return state;
       break;
 
@@ -30,7 +51,8 @@ const reducer = (state: stateType, action: { type: any, token?: string }) => {
 }
 
 const initialState = {
-  token: localStorage.getItem("jwt_token") || undefined
+  token: localStorage.getItem("jwt_token") || undefined,
+  user: null
 }
 
 const AuthContextProvider = ({ children }: React.HTMLProps<HTMLDivElement>) => {

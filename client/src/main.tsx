@@ -6,6 +6,7 @@ import { LayoutProvider } from "./components/layout";
 import { Login, Signup, Home, VerifyEmail, CreateContact } from "./pages";
 import "./index.css";
 import HeadProvider from "./context/provider/HeadProvider";
+import Protect from "./components/auth/Protect";
 
 
 const routes = createBrowserRouter([
@@ -17,7 +18,9 @@ const routes = createBrowserRouter([
         path: "",
         element: (
           <LayoutProvider>
-            <Home />
+            <Protect>
+              <Home />
+            </Protect>
           </LayoutProvider>
         ),
       },
@@ -32,7 +35,10 @@ const routes = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />,
+    element: <Protect>
+      <Login />
+    </Protect>
+    ,
   },
   {
     path: "/signup",

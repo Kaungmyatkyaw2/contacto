@@ -1,6 +1,6 @@
 import { LabeledInput } from "@/sharers/form";
 import { useForm } from "react-hook-form";
-import { emailPattern, setRequired } from "@/utils";
+import { emailPattern, setRequired } from "@/validation";
 import { Link, useNavigate } from "react-router-dom";
 import { FormWrapper } from "@/components/signin_up";
 import axiosClient from "@/lib/axiosClient";
@@ -21,7 +21,7 @@ export const Login = () => {
   const { register, formState, handleSubmit } = form;
   const { errors, isDirty, isValid } = formState;
   const [loading, setLoading] = useState(false);
-  const {  dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -29,7 +29,6 @@ export const Login = () => {
       const response = await axiosClient.post("/users/login", values);
       dispatch({ type: "setToken", token: response.data.token })
       setLoading(false)
-      navigate("/")
     } catch (error: any) {
       toast({
         title: "Failed to login.",

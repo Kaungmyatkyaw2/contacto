@@ -14,7 +14,7 @@ export const LayoutProvider = ({
     <div className="relative">
       <Navbar setOpen={setOpen} />
       <div className="mt-[60px] lg:pt-[20px] w-full flex">
-        <Sidebar open={open} />
+        <Sidebar open={open} setOpen={setOpen} />
         <div className="lg:w-[75%] w-full lg:ml-[25%] ml-0 lg:pt-0 pt-[20px]">
           <div className="relative h-[calc(100vh-80px)] overflow-scroll overflow-x-hidden lg:pr-[30px]">
             {children}
