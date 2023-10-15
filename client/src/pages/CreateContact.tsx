@@ -21,8 +21,10 @@ export const CreateContact = () => {
     const { toast } = useToast();
 
     const form = useForm<FormValues>();
-    const { register, formState, handleSubmit } = form;
+    const { register, formState, handleSubmit, reset } = form;
     const { errors, isDirty, isValid } = formState;
+
+
 
 
     const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,12 +44,12 @@ export const CreateContact = () => {
             values.email && formData.append("email", values.email);
             file && formData.append("photo", file);
 
-            await axiosClient.post("/contacts", formData);
+            await axiosClient().post("/contacts", formData);
 
             toast({
                 title: "Successfully create a contact !",
             })
-            // navigate("/")
+            reset()
         } catch (error) {
             console.log(error)
         }

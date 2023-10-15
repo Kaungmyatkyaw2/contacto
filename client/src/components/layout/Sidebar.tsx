@@ -20,7 +20,10 @@ const Sidebar = ({ open, setOpen }: Props) => {
             <div className="pl-[30px]">
                 <LoadingButton
                     className="py-[24px] px-[20px] rounded-[100px]"
-                    onClick={() => navigate("/create")}
+                    onClick={() => {
+                        navigate("/create")
+                        setOpen(false)
+                    }}
                 >
                     <Plus />
                     <span>

@@ -25,7 +25,7 @@ export const Login = () => {
   const onSubmit = async (values: FormValues) => {
     try {
       setLoading(true)
-      const response = await axiosClient.post("/users/login", values);
+      const response = await axiosClient().post("/users/login", values);
       dispatch({ type: "setToken", token: response.data.token })
       setLoading(false)
     } catch (error: any) {

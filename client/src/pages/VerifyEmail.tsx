@@ -11,7 +11,7 @@ export const VerifyEmail = () => {
 
     const handleVerify = async () => {
         try {
-            await axiosClient.post(`/users/verifyEmail/${searchParams.get("token")}`);
+            await axiosClient().post(`/users/verifyEmail/${searchParams.get("token")}`);
             navigate("/")
         } catch (error: any) {
             toast({

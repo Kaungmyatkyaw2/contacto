@@ -5,10 +5,7 @@ import Sidebar from "./Sidebar";
 export const LayoutProvider = ({
   children,
 }: React.HTMLProps<HTMLDivElement>) => {
-
   const [open, setOpen] = useState(false);
-
-
 
   return (
     <div className="relative">

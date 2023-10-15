@@ -32,7 +32,7 @@ export const Signup = () => {
       data.append("passwordConfirm", values.passwordConfirm)
       data.append("name", values.name)
 
-      const response = await axiosClient.post("/users/signup", data);
+      const response = await axiosClient().post("/users/signup", data);
       toast({
         title: "Verification email send !",
         description: response.data.message,

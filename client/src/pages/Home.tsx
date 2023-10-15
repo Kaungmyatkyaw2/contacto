@@ -25,7 +25,7 @@ export const Home = () => {
   const [contacts, setContacts] = useState<ContactType[]>([]);
 
   const fetchSmth = async () => {
-    const response = await axiosClient.get("/contacts")
+    const response = await axiosClient().get("/contacts")
 
     setContacts(response.data.data.data)
   }
@@ -42,10 +42,10 @@ export const Home = () => {
       <Table>
         <TableHeader className="sticky top-0 left-0 bg-white w-full ">
           <TableRow className="hover:bg-white">
-            <TableHead className="w-[30%] text-[16px] font-bold">Name</TableHead>
+            <TableHead className="sm:w-[30%] w-[50%] text-[16px] font-bold">Name</TableHead>
             <TableHead className="w-[30%] text-[16px] font-bold md:table-cell hidden">Email</TableHead>
             <TableHead className="w-[30%] text-[16px] font-bold sm:table-cell hidden">Phone number</TableHead>
-            <TableHead className="w-[10%] text-[16px] font-bold">Actions</TableHead>
+            <TableHead className="sm:w-[10%] w-[50%] text-[16px] font-bold text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="space-y-[200px]">
@@ -62,8 +62,8 @@ export const Home = () => {
               </TableCell>
               <TableCell className="font-medium py-[20px] md:table-cell hidden">{contact.email || ""}</TableCell>
               <TableCell className="font-medium py-[20px] sm:table-cell hidden">{contact.phoneNumber}</TableCell>
-              <TableCell className="font-medium py-[20px]">
-                <div className="flex items-center space-x-[15px]">
+              <TableCell className="font-medium py-[20px] flex justify-end">
+                <div className="flex items-center space-x-[15px] w-fit">
                   <Pen size={17} />
                   <DeleteIcon size={17} />
                 </div>
