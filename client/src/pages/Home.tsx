@@ -24,7 +24,7 @@ export const Home = () => {
         <Table>
           <TableHeader className="sticky top-0 left-0 bg-white w-full ">
             <TableRow className="hover:bg-white">
-              <TableHead className="sm:w-[30%] w-[50%] text-[16px] font-bold">
+              <TableHead className="sm:w-[30%] w-[80%] text-[16px] font-bold">
                 Name
               </TableHead>
               <TableHead className="w-[30%] text-[16px] font-bold md:table-cell hidden">
@@ -33,7 +33,7 @@ export const Home = () => {
               <TableHead className="w-[30%] text-[16px] font-bold sm:table-cell hidden">
                 Phone number
               </TableHead>
-              <TableHead className="sm:w-[10%] w-[50%] text-[16px] font-bold text-right">
+              <TableHead className="sm:w-[10%] w-[20%] text-[16px] font-bold text-right">
                 Actions
               </TableHead>
             </TableRow>
