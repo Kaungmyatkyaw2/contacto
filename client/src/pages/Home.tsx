@@ -1,23 +1,14 @@
-import { AvatarFallback, AvatarImage, Avatar } from "@/components/ui/avatar";
+import ContactTableRow from "@/components/contact/ContactTableRow";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { useGetContacts } from "@/hooks/contacts.hook";
-import { DeleteIcon, Loader, Pen } from "lucide-react";
-
-interface ContactType {
-  email?: string | undefined;
-  name: string;
-  phoneNumber: string;
-  _id: string;
-  photo?: string;
-  bgColor: string;
-}
+import { ContactType } from "@/types/contact.types";
+import { Loader } from "lucide-react";
 
 export const Home = () => {
   const query = useGetContacts();
@@ -50,36 +41,7 @@ export const Home = () => {
           <TableBody className="space-y-[200px]">
             {contacts &&
               contacts?.map((contact: ContactType) => (
-                <TableRow
-                  key={contact._id}
-                  className="border-none cursor-pointer"
-                >
-                  <TableCell className="font-medium py-[20px]">
-                    <div className="flex items-center space-x-[10px]">
-                      <Avatar>
-                        {contact.photo && (
-                          <AvatarImage src={contact.photo} alt="@shadcn" />
-                        )}
-                        <AvatarFallback className={`bg-[${contact.bgColor}]`}>
-                          {contact.name.substring(0, 2)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span>{contact.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-medium py-[20px] md:table-cell hidden">
-                    {contact.email || ""}
-                  </TableCell>
-                  <TableCell className="font-medium py-[20px] sm:table-cell hidden">
-                    {contact.phoneNumber}
-                  </TableCell>
-                  <TableCell className="font-medium py-[20px] flex justify-end">
-                    <div className="flex items-center space-x-[15px] w-fit">
-                      <Pen size={17} />
-                      <DeleteIcon size={17} />
-                    </div>
-                  </TableCell>
-                </TableRow>
+                <ContactTableRow key={contact._id} contact={contact} />
               ))}
           </TableBody>
         </Table>

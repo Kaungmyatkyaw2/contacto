@@ -2,7 +2,14 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { LayoutProvider } from "./components/layout";
-import { Login, Signup, Home, VerifyEmail, CreateContact } from "./pages";
+import {
+  Login,
+  Signup,
+  Home,
+  VerifyEmail,
+  CreateContact,
+  EditContact,
+} from "./pages";
 import "./index.css";
 import HeadProvider from "./context/provider/HeadProvider";
 import Protect from "./components/auth/Protect";
@@ -28,6 +35,14 @@ const routes = createBrowserRouter([
         element: (
           <LayoutProvider>
             <CreateContact />
+          </LayoutProvider>
+        ),
+      },
+      {
+        path: "edit/:id",
+        element: (
+          <LayoutProvider>
+            <EditContact />
           </LayoutProvider>
         ),
       },

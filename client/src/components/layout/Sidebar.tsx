@@ -14,7 +14,7 @@ const Sidebar = ({ open, setOpen }: Props) => {
 
     return (
         <div className={`
-        lg:w-[25%] w-[90%]  h-[100vh] lg:border-none border-r lg:shadow-none shadow-lg bg-white z-[999] lg:pt-0 pt-[20px] pr-[20px] fixed left-0
+        lg:w-[25%] w-[90%]  h-[100vh] lg:border-none border-r lg:shadow-none shadow-lg bg-white z-[9] lg:pt-0 pt-[20px] pr-[20px] fixed left-0
        lg:translate-x-0 ${open ? "translate-x-0" : "translate-x-[-100%]"} duration-500
         `}>
             <div className="pl-[30px]">
