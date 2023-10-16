@@ -37,7 +37,7 @@ export const Navbar = ({
     },
   ];
   return (
-    <div className="w-full h-[60px] fixed top-0 left-0 border-b">
+    <div className="w-full h-[60px] fixed top-0 left-0 border-b z-[9]">
       <div className="w-ful h-full flex justify-between items-center lg:px-[30px] px-[15px]">
         <div className="w-[25%] flex items-center space-x-[20px]">
           <Button variant={"ghost"} onClick={() => setOpen((prev) => !prev)}>
