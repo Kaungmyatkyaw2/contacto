@@ -60,7 +60,13 @@ const Sidebar = ({ open, setOpen }: Props) => {
           </div>
           {labels &&
             labels.map((label: LabelType) => (
-              <SidebarBtn key={label._id} icon={Tag}>
+              <SidebarBtn
+                key={label._id}
+                icon={Tag}
+                onClick={() => {
+                  navigate(`/label/${label._id}`);
+                }}
+              >
                 {label.name}
               </SidebarBtn>
             ))}

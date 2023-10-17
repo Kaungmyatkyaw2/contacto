@@ -1,13 +1,14 @@
 import { AuthContext } from "@/context/provider/AuthContextProvider";
 import axiosClient from "@/lib/axiosClient";
 import { Loader } from "lucide-react";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
-const Protect = ({ children }: React.HTMLProps<HTMLDivElement>) => {
+const Protect = () => {
   const { state: auth, dispatch } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+
+  const isLoggedIn = !!(auth?.user?._id && auth?.token);
 
   const getMe = async () => {
     try {
@@ -28,24 +29,24 @@ const Protect = ({ children }: React.HTMLProps<HTMLDivElement>) => {
     }
   }, [auth?.token]);
 
-  useEffect(() => {
-    if (!auth?.user?._id || !auth?.token) {
-      navigate("/login");
-    } else {
-      navigate("/");
-    }
-  }, [auth]);
-
   if (loading) {
     return (
-      <div className="h-[100vh] w-full flex flex-col items-center justify-center">
+      <div className="fixed top-0 left-0 h-[100vh] w-full flex flex-col items-center justify-center z-[9999] bg-white">
         <Loader className="animate-spin" size={30} />
         <p className="text-gray-500">Aunthenticating. Please wait!</p>
       </div>
     );
   }
 
-  return <>{children}</>;
+  return isLoggedIn ? (
+    location.pathname.includes("login") ? (
+      <Navigate to="/" replace />
+    ) : (
+      <Outlet />
+    )
+  ) : (
+    <Navigate to="/login" replace />
+  );
 };
 
 export default Protect;

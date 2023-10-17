@@ -1,10 +1,12 @@
 import { ContactTable } from "@/components/contact";
-import { useGetContacts } from "@/hooks/contacts.hook";
+import { useGetContactsByLabel } from "@/hooks/contacts.hook";
 import { ContactType } from "@/types/contact.types";
 import { Loader } from "lucide-react";
+import { useParams } from "react-router-dom";
 
-export const Home = () => {
-  const query = useGetContacts();
+export const LabelPage = () => {
+  const { id } = useParams();
+  const query = useGetContactsByLabel(id || "");
   const contacts: ContactType[] | undefined = query.data?.data?.data;
 
   return (

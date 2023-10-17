@@ -1,11 +1,11 @@
 import { LabeledInput } from "@/sharers/form";
 import { useForm } from "react-hook-form";
 import { emailPattern, setRequired } from "@/validation";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { FormWrapper } from "@/components/signin_up";
 import axiosClient from "@/lib/axiosClient";
 import { ContactoIcon, LoadingButton } from "@/sharers/other";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context/provider/AuthContextProvider";
 
@@ -20,28 +20,28 @@ export const Login = () => {
   const { register, formState, handleSubmit } = form;
   const { errors, isDirty, isValid } = formState;
   const [loading, setLoading] = useState(false);
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch, state: auth } = useContext(AuthContext);
 
   const onSubmit = async (values: FormValues) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axiosClient().post("/users/login", values);
-      dispatch({ type: "setToken", token: response.data.token })
-      setLoading(false)
+      dispatch({ type: "setToken", token: response.data.token });
+      setLoading(false);
     } catch (error: any) {
       toast({
         title: "Failed to login.",
         description: error.response.data.message,
         variant: "destructive",
-      })
-      setLoading(false)
-
+      });
+      setLoading(false);
     }
   };
 
-  return (
+  return auth?.token ? (
+    <Navigate to={"/"} />
+  ) : (
     <div className="w-full h-[100vh] md:py-0 py-[20px] sm:px-0 px-[10px]">
-
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <div>
           <ContactoIcon />

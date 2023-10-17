@@ -21,6 +21,16 @@ export const useGetContact = (id: string) => {
   });
 };
 
+export const useGetContactsByLabel = (id: string) => {
+  return useQuery({
+    queryKey: ["contacts", "labels", id],
+    queryFn: () =>
+      axiosClient()
+        .get(`/labels/${id}/contacts`)
+        .then((res) => res.data),
+  });
+};
+
 export const useCreateContact = () => {
   const queryClient = useQueryClient();
 

@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "@/context/provider/AuthContextProvider";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Navbar = ({
   setOpen,
@@ -20,6 +21,8 @@ export const Navbar = ({
 }) => {
   const navigate = useNavigate();
   const { dispatch, state: auth } = useContext(AuthContext);
+
+  const queryClient = useQueryClient();
 
   const dropdownContents = [
     {
@@ -31,6 +34,8 @@ export const Navbar = ({
           icon: LogOutIcon,
           onClick: () => {
             dispatch({ type: "logOut" });
+            queryClient.setQueryData(["me"], undefined);
+            navigate("/login");
           },
         },
       ],

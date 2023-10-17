@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { LayoutProvider } from "./components/layout";
 import {
@@ -9,62 +9,12 @@ import {
   VerifyEmail,
   CreateContact,
   EditContact,
+  LabelPage,
 } from "./pages";
 import "./index.css";
 import HeadProvider from "./context/provider/HeadProvider";
 import Protect from "./components/auth/Protect";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const routes = createBrowserRouter([
-  {
-    path: "/",
-
-    children: [
-      {
-        path: "",
-        element: (
-          <LayoutProvider>
-            <Protect>
-              <Home />
-            </Protect>
-          </LayoutProvider>
-        ),
-      },
-      {
-        path: "create",
-        element: (
-          <LayoutProvider>
-            <CreateContact />
-          </LayoutProvider>
-        ),
-      },
-      {
-        path: "edit/:id",
-        element: (
-          <LayoutProvider>
-            <EditContact />
-          </LayoutProvider>
-        ),
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: (
-      <Protect>
-        <Login />
-      </Protect>
-    ),
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/verifyEmail",
-    element: <VerifyEmail />,
-  },
-]);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -77,7 +27,35 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <HeadProvider>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={routes} />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <LayoutProvider>
+                <Protect />
+              </LayoutProvider>
+            }
+          >
+            <Route path="" element={<Home />} />
+            <Route path="edit/:id" element={<EditContact />} />
+          </Route>
+          <Route
+            path="/label"
+            element={
+              <LayoutProvider>
+                <Protect />
+              </LayoutProvider>
+            }
+          >
+            <Route path=":id" element={<LabelPage />} />
+          </Route>
+          <Route path="/create" element={<CreateContact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/verfiyEmail" element={<VerifyEmail />} />
+        </Routes>
+      </BrowserRouter>
       <Toaster />
     </QueryClientProvider>
   </HeadProvider>
