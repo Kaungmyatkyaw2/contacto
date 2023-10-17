@@ -18,7 +18,7 @@ interface Prop {
   isLoading?: boolean;
 }
 
-const ContactDeleteDialog = ({
+export const CustomAlertDialog = ({
   open,
   setOpen,
   title,
@@ -35,7 +35,14 @@ const ContactDeleteDialog = ({
             <AlertDialogDescription>{description}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading} onClick={() => {setOpen(false)}}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel
+              disabled={isLoading}
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              Cancel
+            </AlertDialogCancel>
             <LoadingButton onClick={onConfirm} loading={isLoading}>
               Confirm
             </LoadingButton>
@@ -45,5 +52,3 @@ const ContactDeleteDialog = ({
     </>
   );
 };
-
-export default ContactDeleteDialog;

@@ -2,14 +2,13 @@ import { useState } from "react";
 import { TableCell, TableRow } from "../ui/table";
 import { ContactType } from "@/types/contact.types";
 import { AvatarFallback, AvatarImage, Avatar } from "../ui/avatar";
-import { DeleteIcon, Pen } from "lucide-react";
+import { Trash, Pencil } from "lucide-react";
 import { useDeleteContact } from "@/hooks/contacts.hook";
 import { AxiosError } from "axios";
-import ContactDeleteDialog from "../../sharers/other/AlertDialog";
+import { CustomAlertDialog } from "../../sharers/other/";
 import { useToast } from "../ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import axiosClient from "@/lib/axiosClient";
 interface Prop {
   contact: ContactType;
 }
@@ -23,13 +22,6 @@ const ContactTableRow = ({ contact }: Prop) => {
   const avatarBg = `bg-[${contact.bgColor}]`;
 
   const handleEdit = async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["contacts", contact._id],
-      queryFn: () =>
-        axiosClient()
-          .get(`/contacts/${contact._id}`)
-          .then((res) => res.data),
-    });
     navgiate(`/edit/${contact._id}`);
   };
 
@@ -78,12 +70,12 @@ const ContactTableRow = ({ contact }: Prop) => {
         </TableCell>
         <TableCell className="font-medium py-[20px] flex justify-end">
           <div className="flex items-center space-x-[15px] w-fit">
-            <Pen size={17} onClick={handleEdit} />
-            <DeleteIcon size={17} onClick={() => setOpen(true)} />
+            <Pencil size={17} onClick={handleEdit} />
+            <Trash size={17} onClick={() => setOpen(true)} />
           </div>
         </TableCell>
       </TableRow>
-      <ContactDeleteDialog
+      <CustomAlertDialog
         open={open}
         setOpen={setOpen}
         title={`Are you sure to delete contact?`}

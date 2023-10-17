@@ -51,9 +51,7 @@ export const CreateContact = () => {
         });
         reset();
         setPreviewImage(null);
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        navigate("/");
       },
       onError: (error: AxiosError) => {
         toast({

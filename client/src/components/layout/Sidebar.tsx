@@ -1,10 +1,10 @@
 import { LoadingButton } from "@/sharers/other";
-import { Plus, Tag, User } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SidebarBtn from "./SidebarBtn";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { LabelCreateDialog } from "../labels";
+import { LabelCreateDialog, LabelSidebarButton } from "../label";
 import { useGetLabels } from "@/hooks/labels.hooks";
 import { LabelType } from "@/types/label.types";
 
@@ -60,15 +60,7 @@ const Sidebar = ({ open, setOpen }: Props) => {
           </div>
           {labels &&
             labels.map((label: LabelType) => (
-              <SidebarBtn
-                key={label._id}
-                icon={Tag}
-                onClick={() => {
-                  navigate(`/label/${label._id}`);
-                }}
-              >
-                {label.name}
-              </SidebarBtn>
+              <LabelSidebarButton setSidebarOpen={setOpen} key={label._id} label={label} />
             ))}
         </div>
       </div>

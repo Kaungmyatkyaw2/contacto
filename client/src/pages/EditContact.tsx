@@ -29,14 +29,14 @@ export const EditContact = () => {
   const contactQuery = useGetContact(id?.toString() || "");
 
   useEffect(() => {
-    if (contactQuery.isSuccess) {
-      const data = contactQuery.data.data.data;
+    if (contactQuery.data) {
+      const data = contactQuery.data;
       setValue("email", data.email || "");
       setValue("name", data.name || "");
       setValue("phoneNumber", data.phoneNumber || "");
       setPreviewImage(data.photo);
     }
-  }, [contactQuery.isSuccess]);
+  }, [contactQuery.data]);
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
@@ -63,9 +63,7 @@ export const EditContact = () => {
           });
           reset();
           setPreviewImage(null);
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
+          navigate("/");
         },
         onError: (error: any) => {
           toast({

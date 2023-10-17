@@ -17,7 +17,7 @@ export const useGetContact = (id: string) => {
     queryFn: () =>
       axiosClient()
         .get(`/contacts/${id}`)
-        .then((res) => res.data),
+        .then((res) => res.data.data.data),
   });
 };
 
@@ -37,7 +37,7 @@ export const useCreateContact = () => {
   return useMutation({
     mutationFn: (values) => axiosClient().post("/contacts", values),
     onSuccess: (res) => {
-      const data = res.data.data;
+      const data = res.data.data.data;
       queryClient.setQueryData(["contacts", data._id], data);
     },
   });
@@ -50,7 +50,7 @@ export const useUpdateContact = () => {
     mutationFn: ({ id, values }: { id: string; values: any }) =>
       axiosClient().patch(`/contacts/${id}`, values),
     onSuccess: (res) => {
-      const data = res.data.data;
+      const data = res.data.data.data;
       queryClient.setQueryData(["contacts", data._id], data);
     },
   });
