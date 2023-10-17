@@ -3,7 +3,6 @@ const { ImageUploader } = require("../utils/imageUploader");
 const authController = require("../controllers/authController");
 const contactController = require("../controllers/contactController");
 const userController = require("../controllers/userController");
-const ContactModel = require("../models/contactModel");
 const Router = express.Router({ mergeParams: true });
 
 const contactImgUploader = new ImageUploader("contacts");
