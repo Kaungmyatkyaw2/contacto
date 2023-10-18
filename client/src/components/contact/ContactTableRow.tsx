@@ -7,7 +7,6 @@ import { useDeleteContact } from "@/hooks/contacts.hook";
 import { AxiosError } from "axios";
 import { CustomAlertDialog } from "../../sharers/other/";
 import { useToast } from "../ui/use-toast";
-import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 interface Prop {
   contact: ContactType;
@@ -15,7 +14,6 @@ interface Prop {
 
 const ContactTableRow = ({ contact }: Prop) => {
   const deleteContact = useDeleteContact();
-  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const navgiate = useNavigate();
@@ -32,7 +30,6 @@ const ContactTableRow = ({ contact }: Prop) => {
         toast({
           title: "Successfully delete a contact!",
         });
-        queryClient.invalidateQueries(["contacts"], { exact: true });
       },
       onError(error: AxiosError) {
         toast({
@@ -68,10 +65,12 @@ const ContactTableRow = ({ contact }: Prop) => {
         <TableCell className="font-medium py-[20px] sm:table-cell hidden">
           {contact.phoneNumber}
         </TableCell>
-        <TableCell className="font-medium py-[20px] flex justify-end">
-          <div className="flex items-center space-x-[15px] w-fit">
-            <Pencil size={17} onClick={handleEdit} />
-            <Trash size={17} onClick={() => setOpen(true)} />
+        <TableCell className="font-medium py-[20px]">
+          <div className="flex justify-end items-center">
+            <div className="flex items-center space-x-[15px]">
+              <Pencil size={17} onClick={handleEdit} />
+              <Trash size={17} onClick={() => setOpen(true)} />
+            </div>
           </div>
         </TableCell>
       </TableRow>

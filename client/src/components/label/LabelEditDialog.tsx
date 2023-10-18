@@ -6,57 +6,66 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useCreateLabel } from "@/hooks/labels.hooks";
+import { useUpdateLabel } from "@/hooks/labels.hooks";
 import { LabeledInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
 import { setRequired } from "@/validation";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
+import { LabelType } from "@/types/label.types";
 
 interface Prop {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  label: LabelType;
 }
 
 interface FormValues {
   name: string;
 }
 
-export function LabelCreateDialog({ open, setOpen }: Prop) {
-  const form = useForm<FormValues>();
+export function LabelEditDialog({ label, open, setOpen }: Prop) {
+  const form = useForm<FormValues>({
+    defaultValues: {
+      name: label.name,
+    },
+  });
   const { formState, register, handleSubmit } = form;
   const { errors, isDirty, isValid } = formState;
 
   const { toast } = useToast();
 
-  const createLabelMutation = useCreateLabel();
+  const updateLabelMutation = useUpdateLabel();
 
   const onSubmit = async (values: FormValues) => {
     //@ts-ignore
-    await createLabelMutation.mutateAsync(values, {
-      onSuccess: () => {
-        toast({
-          title: "Successfully create a contact!",
-        });
-        setOpen(false);
-      },
-      onError: (error) => {
-        toast({
-          //@ts-ignore
-          title: error?.response?.data.message,
-          variant: "destructive",
-        });
-      },
-    });
+    await updateLabelMutation.mutateAsync(
+      { id: label._id, values },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Successfully edited a label!",
+          });
+          setOpen(false);
+        },
+        onError: (error) => {
+          toast({
+            //@ts-ignore
+            title: error?.response?.data.message,
+            variant: "destructive",
+          });
+        },
+      }
+    );
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Label</DialogTitle>
+          <DialogTitle>Edit Label</DialogTitle>
           <DialogDescription>
-            Create your label here. Click create when you're done.
+            Make changes to your label here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 py-4">
@@ -75,9 +84,9 @@ export function LabelCreateDialog({ open, setOpen }: Prop) {
             <LoadingButton
               type="submit"
               disabled={isDirty && !isValid}
-              loading={createLabelMutation.isLoading}
+              loading={updateLabelMutation.isLoading}
             >
-              Create
+              Save
             </LoadingButton>
           </DialogFooter>
         </form>

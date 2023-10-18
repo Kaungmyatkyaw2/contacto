@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useDeleteLabel } from "@/hooks/labels.hooks";
 import { useToast } from "../ui/use-toast";
 import { AxiosError } from "axios";
+import { LabelEditDialog } from "./LabelEditDialog";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   label: LabelType;
@@ -18,6 +19,7 @@ export const LabelSidebarButton = ({
   ...props
 }: Props) => {
   const [openDeleteBox, setOpenDeleteBox] = useState(false);
+  const [openEditBox, setOpenEditBox] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const deleteLableMutation = useDeleteLabel();
@@ -26,6 +28,7 @@ export const LabelSidebarButton = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
+    setOpenEditBox(true)
   };
 
   const handleDeleteClick = (
@@ -84,6 +87,11 @@ export const LabelSidebarButton = ({
         description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
         isLoading={deleteLableMutation.isLoading}
         onConfirm={handleDelete}
+      />
+      <LabelEditDialog
+        open={openEditBox}
+        setOpen={setOpenEditBox}
+        label={label}
       />
     </>
   );

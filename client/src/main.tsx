@@ -39,6 +39,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           >
             <Route path="" element={<Home />} />
             <Route path="edit/:id" element={<EditContact />} />
+            <Route path="create" element={<CreateContact />} />
           </Route>
           <Route
             path="/label"
@@ -50,7 +51,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           >
             <Route path=":id" element={<LabelPage />} />
           </Route>
-          <Route path="/create" element={<CreateContact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/verfiyEmail" element={<VerifyEmail />} />

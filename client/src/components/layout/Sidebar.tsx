@@ -60,7 +60,11 @@ const Sidebar = ({ open, setOpen }: Props) => {
           </div>
           {labels &&
             labels.map((label: LabelType) => (
-              <LabelSidebarButton setSidebarOpen={setOpen} key={label._id} label={label} />
+              <LabelSidebarButton
+                setSidebarOpen={setOpen}
+                key={label._id}
+                label={label}
+              />
             ))}
         </div>
       </div>
