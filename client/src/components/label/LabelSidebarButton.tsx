@@ -1,6 +1,6 @@
 import { Pencil, Tag, Trash } from "lucide-react";
 import { LabelType } from "@/types/label.types";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CustomAlertDialog } from "@/sharers/other";
 import React, { useState } from "react";
 import { useDeleteLabel } from "@/hooks/labels.hooks";
@@ -21,6 +21,8 @@ export const LabelSidebarButton = ({
   const [openDeleteBox, setOpenDeleteBox] = useState(false);
   const [openEditBox, setOpenEditBox] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isActive = location.pathname.includes(`/label/${label._id}`);
   const { toast } = useToast();
   const deleteLableMutation = useDeleteLabel();
 
@@ -28,7 +30,7 @@ export const LabelSidebarButton = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    setOpenEditBox(true)
+    setOpenEditBox(true);
   };
 
   const handleDeleteClick = (
@@ -61,7 +63,10 @@ export const LabelSidebarButton = ({
     <>
       <div
         {...props}
-        className="cursor-pointer w-full flex justify-between items-center px-[40px] py-[15px] bg-white hover:bg-gray-100  rounded-tr-[100px] rounded-br-[100px] group"
+        className={`
+        "cursor-pointer w-full flex justify-between items-center px-[40px] py-[15px]   rounded-tr-[100px] rounded-br-[100px] group
+        ${isActive ? "bg-blue-400 bg-opacity-20" : "bg-white hover:bg-gray-100"}
+        `}
         onClick={() => {
           setSidebarOpen(false);
           navigate(`/label/${label._id}`);
@@ -71,7 +76,12 @@ export const LabelSidebarButton = ({
           <Tag size={20} />
           <span className="text-[14px] font-medium">{label.name}</span>
         </div>
-        <div className="hidden group-hover:flex items-center space-x-[25px]">
+        <div
+          className={`
+          ${
+            isActive ? "flex" : "hidden"
+          } group-hover:flex items-center space-x-[25px]`}
+        >
           <button onClick={handleDeleteClick}>
             <Trash size={17} />
           </button>

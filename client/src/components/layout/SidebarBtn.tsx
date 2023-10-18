@@ -1,18 +1,22 @@
-import { ButtonProps } from '../ui/button'
-
+import { ButtonProps } from "../ui/button";
 
 interface Props extends ButtonProps {
-    icon: any
+  icon: any;
+  active?: boolean;
 }
 
-const SidebarBtn = ({ ...props }: Props) => {
-    return (
-        <button {...props} className=" w-full flex justify-start items-center pl-[40px] py-[15px] space-x-[10px] bg-white hover:bg-gray-100  rounded-tr-[100px] rounded-br-[100px]">
-            <props.icon size={20} />
-            <span className="text-[14px] font-medium">
-                {props.children}
-            </span>
-        </button>)
-}
+const SidebarBtn = ({ active, ...props }: Props) => {
+  return (
+    <button
+      {...props}
+      className={`w-full flex justify-start items-center pl-[40px] py-[15px] space-x-[10px]   rounded-tr-[100px] rounded-br-[100px] ${
+        active ? "bg-blue-400 bg-opacity-20" : "bg-white hover:bg-gray-100"
+      }`}
+    >
+      <props.icon size={20} />
+      <span className="text-[14px] font-medium">{props.children}</span>
+    </button>
+  );
+};
 
-export default SidebarBtn
+export default SidebarBtn;

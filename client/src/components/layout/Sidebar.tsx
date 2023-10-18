@@ -1,6 +1,6 @@
 import { LoadingButton } from "@/sharers/other";
 import { Plus, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import SidebarBtn from "./SidebarBtn";
 import { Button } from "../ui/button";
 import { useState } from "react";
@@ -15,10 +15,13 @@ interface Props {
 
 const Sidebar = ({ open, setOpen }: Props) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname;
   const [openCreateLabel, setOpenCreateLabel] = useState(false);
 
   const { data } = useGetLabels();
   const labels = data?.data?.data;
+
   return (
     <>
       <div
@@ -45,6 +48,7 @@ const Sidebar = ({ open, setOpen }: Props) => {
         <div className="w-full pt-[20px]">
           <SidebarBtn
             icon={User}
+            active={pathname == "/"}
             onClick={() => {
               navigate("/");
               setOpen(false);

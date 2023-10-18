@@ -17,7 +17,6 @@ const ContactTableRow = ({ contact }: Prop) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const navgiate = useNavigate();
-  const avatarBg = `bg-[${contact.bgColor}]`;
 
   const handleEdit = async () => {
     navgiate(`/edit/${contact._id}`);
@@ -52,7 +51,10 @@ const ContactTableRow = ({ contact }: Prop) => {
               {contact.photo && (
                 <AvatarImage src={contact.photo} alt="@shadcn" />
               )}
-              <AvatarFallback className={`${avatarBg}`}>
+              <AvatarFallback
+                className="text-white"
+                style={{ background: contact.bgColor }}
+              >
                 {contact.name.substring(0, 2)}
               </AvatarFallback>
             </Avatar>
