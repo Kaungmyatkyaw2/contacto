@@ -1,7 +1,7 @@
 import { ContactTable } from "@/components/contact";
 import { useGetContactsByLabel } from "@/hooks/contacts.hook";
+import { HorizontalLoader } from "@/sharers/other";
 import { ContactType } from "@/types/contact.types";
-import { Loader } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 export const LabelPage = () => {
@@ -12,12 +12,12 @@ export const LabelPage = () => {
   return (
     <div className="lg:px-0 px-[30px]">
       {query.isLoading ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <Loader className="animate-spin" />
-        </div>
+        <HorizontalLoader />
       ) : (
         <ContactTable contacts={contacts || []} />
       )}
+
+      {!query.isLoading && query.isFetching && <HorizontalLoader />}
     </div>
   );
 };

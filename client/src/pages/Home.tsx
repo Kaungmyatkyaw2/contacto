@@ -1,7 +1,7 @@
 import { ContactTable } from "@/components/contact";
 import { useGetContacts } from "@/hooks/contacts.hook";
+import { HorizontalLoader } from "@/sharers/other";
 import { ContactType } from "@/types/contact.types";
-import { Loader } from "lucide-react";
 
 export const Home = () => {
   const query = useGetContacts();
@@ -11,11 +11,13 @@ export const Home = () => {
     <div className="lg:px-0 px-[30px]">
       {query.isLoading ? (
         <div className="w-full h-full flex items-center justify-center">
-          <Loader className="animate-spin" />
+          <HorizontalLoader />
         </div>
       ) : (
         <ContactTable contacts={contacts || []} />
       )}
+
+      {!query.isLoading && query.isFetching && <HorizontalLoader />}
     </div>
   );
 };
