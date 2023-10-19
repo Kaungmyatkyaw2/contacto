@@ -25,6 +25,9 @@ exports.getAll = (Model) => {
 
 exports.createOne = (Model) => {
   return catchAsync(async (req, res, next) => {
+    if (req.body.labels) {
+      req.body.labels = JSON.parse(req.body.labels);
+    }
     const data = await Model.create(req.body);
 
     res.status(201).json({

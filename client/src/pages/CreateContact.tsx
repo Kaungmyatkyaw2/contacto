@@ -1,13 +1,30 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useCreateContact } from "@/hooks/contacts.hook";
+import { useGetLabels } from "@/hooks/labels.hooks";
 import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
 import { emailPattern, setRequired } from "@/validation";
 import { AxiosError } from "axios";
-import { Camera, MailIcon, Phone, Plus, User } from "lucide-react";
+import {
+  Camera,
+  Check,
+  MailIcon,
+  Pen,
+  Phone,
+  Plus,
+  Tag,
+  User,
+} from "lucide-react";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { LabelType } from "@/types/label.types";
 
 interface FormValues {
   email: string;
@@ -27,6 +44,12 @@ export const CreateContact = () => {
   const { errors, isDirty, isValid } = formState;
 
   const createContactMutation = useCreateContact();
+  const getLabelsQuery = useGetLabels();
+
+  const labels: LabelType[] = getLabelsQuery.data?.data.data || [];
+  const [tempLabels, setTempLabels] = useState<LabelType[]>([]);
+  const [selectedLabels, setSelectedLabels] = useState<LabelType[]>([]);
+  const tempLabelIds = tempLabels.map((el) => el._id);
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
@@ -39,6 +62,10 @@ export const CreateContact = () => {
     const formData = new FormData();
     formData.append("phoneNumber", values.phoneNumber);
     formData.append("name", values.name);
+    formData.append(
+      "labels",
+      JSON.stringify(selectedLabels.map((el) => el._id))
+    );
 
     values.email && formData.append("email", values.email);
     file && formData.append("photo", file);
@@ -80,10 +107,71 @@ export const CreateContact = () => {
         >
           <Camera size={35} />
         </button>
-        <LoadingButton variant={"outline"} size={"sm"}>
-          <Plus size={19} />
-          <span>Add Label</span>
-        </LoadingButton>
+        <div className="flex flex-wrap  items-center space-x-[15px]">
+          {selectedLabels.map((el) => (
+            <Button variant={"outline"} className="space-x-[10px]" size={"sm"}>
+              <Tag size={17} />
+              <span>{el.name}</span>
+            </Button>
+          ))}
+          <Popover
+            onOpenChange={(e) => {
+              if (!e) {
+                setTempLabels([]);
+              } else {
+                setTempLabels(selectedLabels);
+              }
+            }}
+          >
+            <PopoverTrigger asChild>
+              {selectedLabels.length ? (
+                <Button
+                  variant={"outline"}
+                  size={"icon"}
+                  className="rounded-full"
+                >
+                  <Pen className="h-3 w-3" />
+                </Button>
+              ) : (
+                <Button variant={"outline"} className="space-x-[10px]">
+                  <Plus size={17} />
+                  <span>Add Label</span>
+                </Button>
+              )}
+            </PopoverTrigger>
+            <PopoverContent className="w-[150px] p-0">
+              <div className="">
+                {labels.map((el) => (
+                  <div
+                    onClick={() => {
+                      if (tempLabelIds.includes(el._id)) {
+                        setTempLabels((prev) =>
+                          prev.filter((i) => i._id !== el._id)
+                        );
+                      } else {
+                        setTempLabels((prev) => [...prev, el]);
+                      }
+                    }}
+                    className="w-full px-[15px] py-[10px] cursor-pointer text-sm hover:bg-gray-50 flex items-center space-x-[10px]"
+                  >
+                    {tempLabelIds.includes(el._id) && (
+                      <Check size={17} color="blue" />
+                    )}
+                    <span>{el.name}</span>
+                  </div>
+                ))}
+                <div
+                  onClick={() => {
+                    setSelectedLabels(tempLabels);
+                  }}
+                  className="w-full px-[15px] py-[10px] cursor-pointer text-sm hover:bg-gray-50 text-center"
+                >
+                  <span className="text-[blue] font-medium">Apply</span>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
 
       <form
