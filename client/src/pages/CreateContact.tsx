@@ -5,26 +5,14 @@ import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
 import { emailPattern, setRequired } from "@/validation";
 import { AxiosError } from "axios";
-import {
-  Camera,
-  Check,
-  MailIcon,
-  Pen,
-  Phone,
-  Plus,
-  Tag,
-  User,
-} from "lucide-react";
+import { Camera, MailIcon, Phone, Tag, User } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import { Button } from "@/components/ui/button";
 import { LabelType } from "@/types/label.types";
+import { LabelPopOver } from "@/components/label";
 
 interface FormValues {
   email: string;
@@ -90,9 +78,25 @@ export const CreateContact = () => {
     });
   };
 
+  const onLabelOpenChange = (e: boolean) => {
+    if (!e) {
+      setTempLabels([]);
+    } else {
+      setTempLabels(selectedLabels);
+    }
+  };
+
+  const onLabelChoose = (el: LabelType) => {
+    if (tempLabelIds.includes(el._id)) {
+      setTempLabels((prev) => prev.filter((i) => i._id !== el._id));
+    } else {
+      setTempLabels((prev) => [...prev, el]);
+    }
+  };
+
   return (
     <div className="w-full relative">
-      <div className="w-full py-[30px] border-b flex items-center space-x-[30px]">
+      <div className="w-full py-[30px] border-b flex md:flex-row flex-col md:items-center md:space-x-[30px] md:space-y-0 space-y-[20px] md:pl-0 pl-[30px]">
         <input
           onChange={handleSelectFile}
           accept="image/*"
@@ -114,63 +118,16 @@ export const CreateContact = () => {
               <span>{el.name}</span>
             </Button>
           ))}
-          <Popover
-            onOpenChange={(e) => {
-              if (!e) {
-                setTempLabels([]);
-              } else {
-                setTempLabels(selectedLabels);
-              }
+          <LabelPopOver
+            onOpenChange={onLabelOpenChange}
+            selectedLabels={selectedLabels}
+            labels={labels}
+            onChoose={onLabelChoose}
+            onApply={() => {
+              setSelectedLabels(tempLabels);
             }}
-          >
-            <PopoverTrigger asChild>
-              {selectedLabels.length ? (
-                <Button
-                  variant={"outline"}
-                  size={"icon"}
-                  className="rounded-full"
-                >
-                  <Pen className="h-3 w-3" />
-                </Button>
-              ) : (
-                <Button variant={"outline"} className="space-x-[10px]">
-                  <Plus size={17} />
-                  <span>Add Label</span>
-                </Button>
-              )}
-            </PopoverTrigger>
-            <PopoverContent className="w-[150px] p-0">
-              <div className="">
-                {labels.map((el) => (
-                  <div
-                    onClick={() => {
-                      if (tempLabelIds.includes(el._id)) {
-                        setTempLabels((prev) =>
-                          prev.filter((i) => i._id !== el._id)
-                        );
-                      } else {
-                        setTempLabels((prev) => [...prev, el]);
-                      }
-                    }}
-                    className="w-full px-[15px] py-[10px] cursor-pointer text-sm hover:bg-gray-50 flex items-center space-x-[10px]"
-                  >
-                    {tempLabelIds.includes(el._id) && (
-                      <Check size={17} color="blue" />
-                    )}
-                    <span>{el.name}</span>
-                  </div>
-                ))}
-                <div
-                  onClick={() => {
-                    setSelectedLabels(tempLabels);
-                  }}
-                  className="w-full px-[15px] py-[10px] cursor-pointer text-sm hover:bg-gray-50 text-center"
-                >
-                  <span className="text-[blue] font-medium">Apply</span>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+            tempLabelIds={tempLabelIds}
+          />
         </div>
       </div>
 

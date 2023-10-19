@@ -21,12 +21,14 @@ Router.route("/")
     contactImgUploader.uploadLocally("photo"),
     contactImgUploader.uploadToCloudinary(),
     userController.setUserId("body"),
+    contactController.parseLabelString,
     contactController.createContact
   );
 Router.route("/:id")
   .get(contactController.getContactById)
   .patch(
     contactImgUploader.uploadLocally("photo"),
+    contactController.parseLabelString,
     contactController.updateContact
   )
   .delete(contactController.deleteContact);

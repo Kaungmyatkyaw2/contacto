@@ -1,9 +1,13 @@
+import { LabelPopOver } from "@/components/label";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetContact, useUpdateContact } from "@/hooks/contacts.hook";
+import { useGetLabels } from "@/hooks/labels.hooks";
 import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
+import { LabelType } from "@/types/label.types";
 import { emailPattern, setRequired } from "@/validation";
-import { Camera, MailIcon, Phone, Plus, User } from "lucide-react";
+import { Camera, MailIcon, Phone, Tag, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -26,17 +30,24 @@ export const EditContact = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const updateContactoMutation = useUpdateContact();
-  const contactQuery = useGetContact(id?.toString() || "");
+  const getContactQuery = useGetContact(id?.toString() || "");
+
+  const getLabelsQuery = useGetLabels();
+  const [selectedLabels, setSelectedLabels] = useState<LabelType[]>([]);
+  const [tempLabels, setTempLabels] = useState<LabelType[]>([]);
+  const tempLabelIds = tempLabels.map((el) => el._id);
+  const labels = getLabelsQuery.data?.data?.data;
 
   useEffect(() => {
-    if (contactQuery.data) {
-      const data = contactQuery.data;
+    if (getContactQuery.data) {
+      const data = getContactQuery.data;
       setValue("email", data.email || "");
       setValue("name", data.name || "");
       setValue("phoneNumber", data.phoneNumber || "");
+      setSelectedLabels(data.labels);
       setPreviewImage(data.photo);
     }
-  }, [contactQuery.data]);
+  }, [getContactQuery.data]);
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
@@ -49,6 +60,10 @@ export const EditContact = () => {
     const formData = new FormData();
     formData.append("phoneNumber", values.phoneNumber);
     formData.append("name", values.name);
+    formData.append(
+      "labels",
+      JSON.stringify(selectedLabels.map((el) => el._id))
+    );
 
     values.email && formData.append("email", values.email);
     file && formData.append("photo", file);
@@ -76,6 +91,22 @@ export const EditContact = () => {
     );
   };
 
+  const onLabelOpenChange = (e: boolean) => {
+    if (!e) {
+      setTempLabels([]);
+    } else {
+      setTempLabels(selectedLabels);
+    }
+  };
+
+  const onLabelChoose = (el: LabelType) => {
+    if (tempLabelIds.includes(el._id)) {
+      setTempLabels((prev) => prev.filter((i) => i._id !== el._id));
+    } else {
+      setTempLabels((prev) => [...prev, el]);
+    }
+  };
+
   return (
     <div className="w-full relative">
       <div className="w-full py-[30px] border-b flex items-center space-x-[30px]">
@@ -93,10 +124,24 @@ export const EditContact = () => {
         >
           <Camera size={35} />
         </button>
-        <LoadingButton variant={"outline"} size={"sm"}>
-          <Plus size={19} />
-          <span>Add Label</span>
-        </LoadingButton>
+        <div className="flex flex-wrap  items-center space-x-[15px]">
+          {selectedLabels.map((el) => (
+            <Button variant={"outline"} className="space-x-[10px]" size={"sm"}>
+              <Tag size={17} />
+              <span>{el.name}</span>
+            </Button>
+          ))}
+          <LabelPopOver
+            onOpenChange={onLabelOpenChange}
+            selectedLabels={selectedLabels}
+            labels={labels}
+            onChoose={onLabelChoose}
+            onApply={() => {
+              setSelectedLabels(tempLabels);
+            }}
+            tempLabelIds={tempLabelIds}
+          />
+        </div>
       </div>
 
       <form
