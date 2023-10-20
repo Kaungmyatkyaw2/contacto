@@ -24,7 +24,7 @@ interface FormValues {
 
 export function LabelCreateDialog({ open, setOpen }: Prop) {
   const form = useForm<FormValues>();
-  const { formState, register, handleSubmit } = form;
+  const { formState, register, handleSubmit, reset } = form;
   const { errors, isDirty, isValid } = formState;
 
   const { toast } = useToast();
@@ -38,6 +38,7 @@ export function LabelCreateDialog({ open, setOpen }: Prop) {
         toast({
           title: "Successfully create a contact!",
         });
+        reset();
         setOpen(false);
       },
       onError: (error) => {

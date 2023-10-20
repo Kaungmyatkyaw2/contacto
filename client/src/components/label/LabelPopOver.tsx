@@ -17,8 +17,8 @@ interface Prop {
 }
 export const LabelPopOver = ({
   onOpenChange,
-  selectedLabels,
-  labels,
+  selectedLabels = [],
+  labels = [],
   onChoose,
   tempLabelIds,
   onApply,
@@ -42,6 +42,7 @@ export const LabelPopOver = ({
           <div className="">
             {labels.map((el) => (
               <div
+                key={el._id}
                 onClick={() => onChoose(el)}
                 className="w-full px-[15px] py-[10px] cursor-pointer text-sm hover:bg-gray-50 flex items-center space-x-[10px]"
               >

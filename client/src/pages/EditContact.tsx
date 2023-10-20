@@ -109,7 +109,7 @@ export const EditContact = () => {
 
   return (
     <div className="w-full relative">
-      <div className="w-full py-[30px] border-b flex items-center space-x-[30px]">
+      <div className="w-full py-[30px] border-b flex md:flex-row flex-col md:items-center md:space-x-[30px] md:space-y-0 space-y-[20px] md:pl-0 pl-[30px]">
         <input
           onChange={handleSelectFile}
           accept="image/*"
@@ -126,7 +126,7 @@ export const EditContact = () => {
         </button>
         <div className="flex flex-wrap  items-center space-x-[15px]">
           {selectedLabels.map((el) => (
-            <Button variant={"outline"} className="space-x-[10px]" size={"sm"}>
+            <Button key={el._id} variant={"outline"} className="space-x-[10px]" size={"sm"}>
               <Tag size={17} />
               <span>{el.name}</span>
             </Button>

@@ -1,1 +1,1 @@
-export * from "./ContactTable";
+export * from "./ContactPanel";

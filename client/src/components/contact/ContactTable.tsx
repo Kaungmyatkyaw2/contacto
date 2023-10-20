@@ -15,7 +15,7 @@ interface Prop {
 export const ContactTable = ({ contacts }: Prop) => {
   return contacts.length ? (
     <Table>
-      <TableHeader className="sticky top-0 left-0 bg-white w-full ">
+      <TableHeader className="sticky top-0 left-0 bg-white w-full z-[5] ">
         <TableRow className="hover:bg-white">
           <TableHead className="sm:w-[30%] w-[80%] text-[16px] font-bold">
             Name

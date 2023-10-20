@@ -5,7 +5,7 @@ const ContactSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    minLength: [3, "Contact name must have 5 characters minimum."],
+    minLength: [3, "Contact name must have 3 characters minimum."],
     required: [true, "Name is required for a contact."],
   },
 

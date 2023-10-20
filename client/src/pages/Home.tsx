@@ -1,23 +1,33 @@
-import { ContactTable } from "@/components/contact";
+import { ContactPanel } from "@/components/contact";
 import { useGetContacts } from "@/hooks/contacts.hook";
-import { HorizontalLoader } from "@/sharers/other";
-import { ContactType } from "@/types/contact.types";
+import { handleInfinitScroll } from "@/lib/handleInfiniteScroll";
+import { useEffect, useRef } from "react";
 
 export const Home = () => {
-  const query = useGetContacts();
-  const contacts: ContactType[] | undefined = query.data?.data?.data;
+  const ref = useRef<HTMLDivElement>(null);
+  const getConactsQuery = useGetContacts();
 
-  return (
-    <div className="lg:px-0 px-[30px]">
-      {query.isLoading ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <HorizontalLoader />
-        </div>
-      ) : (
-        <ContactTable contacts={contacts || []} />
-      )}
+  useEffect(() => {
+    const element = ref.current;
 
-      {!query.isLoading && query.isFetching && <HorizontalLoader />}
-    </div>
-  );
+    if (!element) return;
+
+    const onScrollInfinite = async () => {
+      if (getConactsQuery.hasNextPage && !getConactsQuery.isFetchingNextPage) {
+        await getConactsQuery.fetchNextPage();
+      }
+    };
+    const [addEvent, removeEvent] = handleInfinitScroll(
+      onScrollInfinite,
+      element
+    );
+
+    addEvent();
+
+    return () => {
+      removeEvent();
+    };
+  }, [getConactsQuery.hasNextPage, getConactsQuery.isFetchingNextPage]);
+
+  return <ContactPanel query={getConactsQuery} ref={ref} />;
 };

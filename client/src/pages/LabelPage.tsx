@@ -1,23 +1,44 @@
-import { ContactTable } from "@/components/contact";
+import { ContactPanel } from "@/components/contact";
 import { useGetContactsByLabel } from "@/hooks/contacts.hook";
-import { HorizontalLoader } from "@/sharers/other";
-import { ContactType } from "@/types/contact.types";
+import { handleInfinitScroll } from "@/lib/handleInfiniteScroll";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 export const LabelPage = () => {
   const { id } = useParams();
-  const query = useGetContactsByLabel(id || "");
-  const contacts: ContactType[] | undefined = query.data?.data?.data;
+  const ref = useRef<HTMLDivElement>(null);
+  const getContactsByLabelQuery = useGetContactsByLabel(id || "");
 
-  return (
-    <div className="lg:px-0 px-[30px]">
-      {query.isLoading ? (
-        <HorizontalLoader />
-      ) : (
-        <ContactTable contacts={contacts || []} />
-      )}
+  console.log(getContactsByLabelQuery.data?.pages);
 
-      {!query.isLoading && query.isFetching && <HorizontalLoader />}
-    </div>
-  );
+  useEffect(() => {
+    const element = ref.current;
+
+    if (!element) return;
+
+    const onScrollInfinite = async () => {
+      const { hasNextPage, isFetchingNextPage, fetchNextPage } =
+        getContactsByLabelQuery;
+
+      if (hasNextPage && !isFetchingNextPage) {
+        await fetchNextPage();
+      }
+    };
+
+    const [addEvent, removeEvent] = handleInfinitScroll(
+      onScrollInfinite,
+      element
+    );
+
+    addEvent();
+
+    return () => {
+      removeEvent();
+    };
+  }, [
+    getContactsByLabelQuery.hasNextPage,
+    getContactsByLabelQuery.isFetchingNextPage,
+  ]);
+
+  return <ContactPanel query={getContactsByLabelQuery} ref={ref} />;
 };

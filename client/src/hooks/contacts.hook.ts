@@ -1,19 +1,31 @@
 import axiosClient from "@/lib/axiosClient";
 import { ContactType } from "@/types/contact.types";
 import { ResponseDataArray } from "@/types/queryData.types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   filteredQueryResponseArrayData,
   updatedQueryResponseArrayData,
 } from "./helper";
 
 export const useGetContacts = () => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["contacts"],
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       axiosClient()
-        .get("/contacts")
+        .get(`/contacts?page=${pageParam}`)
         .then((res) => res.data),
+    getNextPageParam: (lastpage: ResponseDataArray<ContactType>, allpages) => {
+      if (lastpage.result < 10) {
+        return undefined;
+      } else {
+        return allpages.length + 1;
+      }
+    },
   });
 };
 
@@ -27,13 +39,20 @@ export const useGetContact = (id: string) => {
   });
 };
 
-export const useGetContactsByLabel = (id: string) => {
-  return useQuery({
-    queryKey: ["contacts", "labels", id],
-    queryFn: () =>
+export const useGetContactsByLabel = (labelId: string) => {
+  return useInfiniteQuery({
+    queryKey: ["contacts", "labels", labelId],
+    queryFn: ({ pageParam = 1 }) =>
       axiosClient()
-        .get(`/labels/${id}/contacts`)
+        .get(`/labels/${labelId}/contacts?page=${pageParam}`)
         .then((res) => res.data),
+    getNextPageParam: (lastpage: ResponseDataArray<ContactType>, allpages) => {
+      if (lastpage.result < 10) {
+        return undefined;
+      } else {
+        return allpages.length + 1;
+      }
+    },
   });
 };
 
