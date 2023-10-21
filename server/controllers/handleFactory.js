@@ -9,7 +9,8 @@ exports.getAll = (Model) => {
       .filter()
       .sort()
       .paginate()
-      .select();
+      .select()
+      .search();
 
     const data = await query.query;
 

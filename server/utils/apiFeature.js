@@ -7,7 +7,7 @@ module.exports = class ApiFeatures {
   filter() {
     let queryString = { ...this.queryString };
 
-    const excludeFileds = ["limit", "page", "fields", "sort"];
+    const excludeFileds = ["limit", "page", "fields", "sort", "search"];
 
     excludeFileds.forEach((el) => {
       delete queryString[el];
@@ -59,6 +59,23 @@ module.exports = class ApiFeatures {
       this.query.select(fields);
     }
 
+    return this;
+  }
+
+  search() {
+    if (this.queryString.search) {
+      const regex = new RegExp(this.queryString.search, "i");
+      this.query.find({
+        $or: [
+          {
+            name: { $regex: regex },
+          },
+          {
+            email: { $regex: regex },
+          },
+        ],
+      });
+    }
     return this;
   }
 };

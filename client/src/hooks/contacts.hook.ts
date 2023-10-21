@@ -59,6 +59,21 @@ export const useGetContactsByLabel = (labelId: string) => {
   });
 };
 
+export const useSearchContacts = (searchValue: string) => {
+  return useQuery({
+    queryKey: ["contacts", "search", searchValue],
+    queryFn: () => {
+      if (searchValue.length) {
+        return axiosClient()
+          .get(`/contacts?search=${searchValue}`)
+          .then((res) => res.data);
+      } else {
+        return { data: { data: [] } };
+      }
+    },
+  });
+};
+
 export const useCreateContact = () => {
   const queryClient = useQueryClient();
 

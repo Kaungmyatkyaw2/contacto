@@ -9,7 +9,6 @@ exports.updateContact = factory.updateOne(Contact);
 exports.deleteContact = factory.deleteOne(Contact);
 
 exports.parseLabelString = (req, res, next) => {
-  console.log(typeof req.body.labels)
   if (req.body.labels && typeof req.body.labels == "string") {
     req.body.labels = JSON.parse(req.body.labels);
   }
