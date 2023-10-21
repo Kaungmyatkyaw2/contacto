@@ -7,9 +7,7 @@ import { useParams } from "react-router-dom";
 export const LabelPage = () => {
   const { id } = useParams();
   const ref = useRef<HTMLDivElement>(null);
-  const getContactsByLabelQuery = useGetContactsByLabel(id || "");
-
-  console.log(getContactsByLabelQuery.data?.pages);
+  const query = useGetContactsByLabel(id || "");
 
   useEffect(() => {
     const element = ref.current;
@@ -17,8 +15,7 @@ export const LabelPage = () => {
     if (!element) return;
 
     const onScrollInfinite = async () => {
-      const { hasNextPage, isFetchingNextPage, fetchNextPage } =
-        getContactsByLabelQuery;
+      const { hasNextPage, isFetchingNextPage, fetchNextPage } = query;
 
       if (hasNextPage && !isFetchingNextPage) {
         await fetchNextPage();
@@ -35,10 +32,7 @@ export const LabelPage = () => {
     return () => {
       removeEvent();
     };
-  }, [
-    getContactsByLabelQuery.hasNextPage,
-    getContactsByLabelQuery.isFetchingNextPage,
-  ]);
+  }, [query.hasNextPage, query.isFetchingNextPage]);
 
-  return <ContactPanel query={getContactsByLabelQuery} ref={ref} />;
+  return <ContactPanel query={query} ref={ref} />;
 };

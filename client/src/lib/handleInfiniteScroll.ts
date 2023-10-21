@@ -1,3 +1,10 @@
+import { ContactType } from "@/types/contact.types";
+import { LabelType } from "@/types/label.types";
+import {
+  InfiniteQueryResponse,
+  ResponseDataArray,
+} from "@/types/queryData.types";
+
 export const handleInfinitScroll = (fn: any, element: HTMLElement) => {
   const onScroll = async (_: Event) => {
     if (
@@ -17,4 +24,15 @@ export const handleInfinitScroll = (fn: any, element: HTMLElement) => {
   };
 
   return [addEventListener, removeEventListener];
+};
+
+export const splitPagesData = <T extends ContactType | LabelType>(
+  data: InfiniteQueryResponse<T> | undefined
+) => {
+  if (!data) return data;
+  const pagesData: any[] =
+    data?.pages.map((page: ResponseDataArray<T>) => page.data.data) || [];
+  const finalResult: T[] = [].concat(...pagesData);
+
+  return finalResult;
 };

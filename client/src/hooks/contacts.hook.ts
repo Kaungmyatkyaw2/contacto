@@ -1,6 +1,9 @@
 import axiosClient from "@/lib/axiosClient";
 import { ContactType } from "@/types/contact.types";
-import { ResponseDataArray } from "@/types/queryData.types";
+import {
+  InfiniteQueryResponse,
+  ResponseDataArray,
+} from "@/types/queryData.types";
 import {
   useInfiniteQuery,
   useMutation,
@@ -62,17 +65,22 @@ export const useCreateContact = () => {
   return useMutation({
     mutationFn: (values) => axiosClient().post("/contacts", values),
     onSuccess: (res) => {
-      const data = res.data.data.data;
+      const createdContact = res.data.data.data;
 
       const prevCachedContacts: any = queryClient.getQueryData(["contacts"], {
         exact: true,
       });
 
       if (prevCachedContacts) {
-        prevCachedContacts?.data?.data?.push(data);
+        prevCachedContacts?.pages[
+          prevCachedContacts?.pages.length - 1
+        ].data?.data?.push(createdContact);
       }
 
-      queryClient.setQueryData(["contacts", data._id], data);
+      queryClient.setQueryData(
+        ["contacts", createdContact._id],
+        createdContact
+      );
       queryClient.setQueryData(["contacts"], prevCachedContacts);
     },
   });
@@ -86,7 +94,7 @@ export const useUpdateContact = () => {
       axiosClient().patch(`/contacts/${id}`, values),
     onSuccess: (res) => {
       const data: ContactType = res.data.data.data;
-      let prevCachedContacts: ResponseDataArray<ContactType> | undefined =
+      let prevCachedContacts: InfiniteQueryResponse<ContactType> | undefined =
         queryClient.getQueryData(["contacts"]);
 
       if (prevCachedContacts) {
@@ -108,7 +116,7 @@ export const useDeleteContact = () => {
   return useMutation({
     mutationFn: (id) => axiosClient().delete(`/contacts/${id}`),
     onSuccess: (_, varaiables: any) => {
-      let prevCachedContacts: ResponseDataArray<ContactType> | undefined =
+      let prevCachedContacts: InfiniteQueryResponse<ContactType> | undefined =
         queryClient.getQueryData(["contacts"]);
 
       if (prevCachedContacts) {

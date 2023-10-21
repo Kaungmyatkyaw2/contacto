@@ -1,19 +1,33 @@
 import axiosClient from "@/lib/axiosClient";
 import { LabelType } from "@/types/label.types";
-import { ResponseDataArray } from "@/types/queryData.types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteQueryResponse,
+  ResponseDataArray,
+} from "@/types/queryData.types";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   filteredQueryResponseArrayData,
   updatedQueryResponseArrayData,
 } from "./helper";
 
 export const useGetLabels = () => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["labels"],
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       axiosClient()
-        .get("/labels")
+        .get(`/labels?page=${pageParam}`)
         .then((res) => res.data),
+    getNextPageParam: (lastpage: ResponseDataArray<LabelType>, allpages) => {
+      if (lastpage.result < 10) {
+        return undefined;
+      } else {
+        return allpages.length + 1;
+      }
+    },
   });
 };
 
@@ -28,7 +42,9 @@ export const useCreateLabel = () => {
       const createdLabel = res.data.data.data;
 
       if (prevCachedLabels) {
-        prevCachedLabels?.data?.data?.push(createdLabel);
+        prevCachedLabels?.pages[
+          prevCachedLabels?.pages.length - 1
+        ].data?.data?.push(createdLabel);
         prevCachedLabels.result += 1;
       }
 
@@ -46,7 +62,7 @@ export const useUpdateLabel = () => {
       axiosClient().patch(`/labels/${id}`, values),
     onSuccess: (res) => {
       const data: LabelType = res.data.data.data;
-      let prevCachedLabels: ResponseDataArray<LabelType> | undefined =
+      let prevCachedLabels: InfiniteQueryResponse<LabelType> | undefined =
         queryClient.getQueryData(["labels"]);
 
       if (prevCachedLabels) {
@@ -68,7 +84,7 @@ export const useDeleteLabel = () => {
   return useMutation({
     mutationFn: (id) => axiosClient().delete(`/labels/${id}`),
     onSuccess: (_, varaiables: any) => {
-      let prevCachedLabels: ResponseDataArray<LabelType> | undefined =
+      let prevCachedLabels: InfiniteQueryResponse<LabelType> | undefined =
         queryClient.getQueryData(["labels"]);
 
       if (prevCachedLabels) {

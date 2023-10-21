@@ -5,6 +5,7 @@ import { ContactTable } from "./ContactTable";
 import { UseInfiniteQueryResult } from "@tanstack/react-query";
 import { ResponseDataArray } from "@/types/queryData.types";
 import { ContactType } from "@/types/contact.types";
+import { splitPagesData } from "@/lib/handleInfiniteScroll";
 
 interface Prop {
   query: UseInfiniteQueryResult<ResponseDataArray<ContactType>>;
@@ -12,11 +13,7 @@ interface Prop {
 
 export const ContactPanel = forwardRef(
   ({ query }: Prop, ref: Ref<HTMLDivElement>) => {
-    const pagesData: any[] =
-      query.data?.pages.map(
-        (page: ResponseDataArray<ContactType>) => page.data.data
-      ) || [];
-    const contacts: ContactType[] = [].concat(...pagesData);
+    const contacts = splitPagesData(query.data);
 
     return (
       <LayoutChildWrapper ref={ref}>

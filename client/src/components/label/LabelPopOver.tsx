@@ -38,7 +38,7 @@ export const LabelPopOver = ({
             </Button>
           )}
         </PopoverTrigger>
-        <PopoverContent className="w-[150px] p-0">
+        <PopoverContent className="w-[150px] p-0 h-[200px] overflow-auto hide-scroll">
           <div className="">
             {labels.map((el) => (
               <div

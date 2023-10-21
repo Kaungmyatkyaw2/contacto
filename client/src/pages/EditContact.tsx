@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetContact, useUpdateContact } from "@/hooks/contacts.hook";
 import { useGetLabels } from "@/hooks/labels.hooks";
+import { splitPagesData } from "@/lib/handleInfiniteScroll";
 import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
 import { LabelType } from "@/types/label.types";
@@ -33,10 +34,11 @@ export const EditContact = () => {
   const getContactQuery = useGetContact(id?.toString() || "");
 
   const getLabelsQuery = useGetLabels();
+  const labels = splitPagesData<LabelType>(getLabelsQuery.data) || [];
+
   const [selectedLabels, setSelectedLabels] = useState<LabelType[]>([]);
   const [tempLabels, setTempLabels] = useState<LabelType[]>([]);
   const tempLabelIds = tempLabels.map((el) => el._id);
-  const labels = getLabelsQuery.data?.data?.data;
 
   useEffect(() => {
     if (getContactQuery.data) {
@@ -126,7 +128,12 @@ export const EditContact = () => {
         </button>
         <div className="flex flex-wrap  items-center space-x-[15px]">
           {selectedLabels.map((el) => (
-            <Button key={el._id} variant={"outline"} className="space-x-[10px]" size={"sm"}>
+            <Button
+              key={el._id}
+              variant={"outline"}
+              className="space-x-[10px]"
+              size={"sm"}
+            >
               <Tag size={17} />
               <span>{el.name}</span>
             </Button>

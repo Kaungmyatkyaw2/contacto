@@ -1,12 +1,16 @@
-import { LoadingButton } from "@/sharers/other";
+import { HorizontalLoader, LoadingButton } from "@/sharers/other";
 import { Plus, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SidebarBtn from "./SidebarBtn";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LabelCreateDialog, LabelSidebarButton } from "../label";
 import { useGetLabels } from "@/hooks/labels.hooks";
 import { LabelType } from "@/types/label.types";
+import {
+  handleInfinitScroll,
+  splitPagesData,
+} from "@/lib/handleInfiniteScroll";
 
 interface Props {
   open: boolean;
@@ -14,19 +18,46 @@ interface Props {
 }
 
 const Sidebar = ({ open, setOpen }: Props) => {
+  const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
   const [openCreateLabel, setOpenCreateLabel] = useState(false);
 
-  const { data } = useGetLabels();
-  const labels = data?.data?.data;
+  const query = useGetLabels();
+  const labels = splitPagesData<LabelType>(query.data) || [];
+
+  useEffect(() => {
+    const element = ref.current;
+
+    if (!element) return;
+
+    const onScrollInfinite = async () => {
+      const { hasNextPage, isFetchingNextPage, fetchNextPage } = query;
+
+      if (hasNextPage && !isFetchingNextPage) {
+        await fetchNextPage();
+      }
+    };
+
+    const [addEvent, removeEvent] = handleInfinitScroll(
+      onScrollInfinite,
+      element
+    );
+
+    addEvent();
+
+    return () => {
+      removeEvent();
+    };
+  }, [query.hasNextPage, query.isFetchingNextPage]);
 
   return (
     <>
       <div
+        ref={ref}
         className={`
-        lg:w-[25%] w-[90%]  h-[100vh] lg:border-none border-r lg:shadow-none shadow-lg bg-white z-[9] lg:pt-0 pt-[20px] pr-[20px] fixed left-0
+        lg:w-[25%] w-[90%] h-[100vh] overflow-y-auto overflow-x-hidden hide-scroll lg:border-none border-r lg:shadow-none shadow-lg bg-white z-[9] lg:pt-0 pb-[100px] pr-[20px] fixed left-0
        lg:translate-x-0 ${
          open ? "translate-x-0" : "translate-x-[-100%]"
        } duration-500
@@ -70,6 +101,7 @@ const Sidebar = ({ open, setOpen }: Props) => {
                 label={label}
               />
             ))}
+          {query.isFetchingNextPage && <HorizontalLoader />}
         </div>
       </div>
       <LabelCreateDialog

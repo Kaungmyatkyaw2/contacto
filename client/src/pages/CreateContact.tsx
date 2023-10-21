@@ -9,10 +9,10 @@ import { Camera, MailIcon, Phone, Tag, User } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
 import { Button } from "@/components/ui/button";
 import { LabelType } from "@/types/label.types";
 import { LabelPopOver } from "@/components/label";
+import { splitPagesData } from "@/lib/handleInfiniteScroll";
 
 interface FormValues {
   email: string;
@@ -33,8 +33,8 @@ export const CreateContact = () => {
 
   const createContactMutation = useCreateContact();
   const getLabelsQuery = useGetLabels();
+  const labels = splitPagesData<LabelType>(getLabelsQuery.data) || [];
 
-  const labels: LabelType[] = getLabelsQuery.data?.data.data || [];
   const [tempLabels, setTempLabels] = useState<LabelType[]>([]);
   const [selectedLabels, setSelectedLabels] = useState<LabelType[]>([]);
   const tempLabelIds = tempLabels.map((el) => el._id);

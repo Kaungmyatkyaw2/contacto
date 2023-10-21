@@ -5,3 +5,8 @@ export interface ResponseDataArray<T> {
     data: T[];
   };
 }
+
+export interface InfiniteQueryResponse<T> {
+  pageParams: any[];
+  pages: ResponseDataArray<T>[];
+}
