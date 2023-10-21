@@ -5,13 +5,12 @@ import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
 import { emailPattern, setRequired } from "@/validation";
 import { AxiosError } from "axios";
-import { Camera, MailIcon, Phone, Tag, User } from "lucide-react";
+import { Camera, MailIcon, Phone, User } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { LabelType } from "@/types/label.types";
-import { LabelPopOver } from "@/components/label";
+import { LabelPopOver, LabelTagButton } from "@/components/label";
 import { splitPagesData } from "@/lib/handleInfiniteScroll";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
@@ -111,18 +110,15 @@ export const CreateContact = () => {
           className="hidden"
         />
         <button
-          className="bg-blue-200 hover:opacity-75 rounded-full cursor-pointer h-[150px] w-[150px] flex justify-center items-center"
+          className="bg-blue-200 hover:opacity-75 rounded-full cursor-pointer min-h-[150px] min-w-[150px] max-w-[150px] flex justify-center items-center"
           style={{ backgroundImage: `url("${previewImage}")` }}
           onClick={() => fileRef.current?.click()}
         >
           <Camera size={35} />
         </button>
-        <div className="flex flex-wrap  items-center space-x-[15px]">
+        <div className="flex flex-wrap items-center gap-4 w-full">
           {selectedLabels.map((el) => (
-            <Button variant={"outline"} className="space-x-[10px]" size={"sm"}>
-              <Tag size={17} />
-              <span>{el.name}</span>
-            </Button>
+            <LabelTagButton>{el.name}</LabelTagButton>
           ))}
           <LabelPopOver
             isLoading={getLabelsQuery.isFetchingNextPage}

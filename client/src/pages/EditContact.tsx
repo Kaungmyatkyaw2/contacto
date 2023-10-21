@@ -1,5 +1,4 @@
-import { LabelPopOver } from "@/components/label";
-import { Button } from "@/components/ui/button";
+import { LabelPopOver, LabelTagButton } from "@/components/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetContact, useUpdateContact } from "@/hooks/contacts.hook";
 import { useGetLabels } from "@/hooks/labels.hooks";
@@ -9,7 +8,7 @@ import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
 import { LabelType } from "@/types/label.types";
 import { emailPattern, setRequired } from "@/validation";
-import { Camera, MailIcon, Phone, Tag, User } from "lucide-react";
+import { Camera, Loader, MailIcon, Phone, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -116,6 +115,15 @@ export const EditContact = () => {
     }
   };
 
+  if (getContactQuery.isLoading) {
+    return (
+      <div className="w-full h-[calc(100vh-100px)] space-y-[5px] flex flex-col items-center justify-center">
+        <Loader className="animate-spin" size={30} />
+        <h1>Fetching data... Please wait!</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full relative">
       <div className="w-full py-[30px] border-b flex md:flex-row flex-col md:items-center md:space-x-[30px] md:space-y-0 space-y-[20px] md:pl-0 pl-[30px]">
@@ -127,23 +135,15 @@ export const EditContact = () => {
           className="hidden"
         />
         <button
-          className="bg-blue-200 hover:opacity-75 rounded-full cursor-pointer min-h-[150px] min-w-[150px] flex justify-center items-center"
+          className="bg-blue-200 hover:opacity-75 rounded-full cursor-pointer min-h-[150px] min-w-[150px] max-w-[150px] flex justify-center items-center"
           style={{ backgroundImage: `url("${previewImage}")` }}
           onClick={() => fileRef.current?.click()}
         >
           <Camera size={35} />
         </button>
-        <div className="flex flex-wrap items-center space-x-[15px] w-full">
+        <div className="flex flex-wrap items-center gap-4 w-full">
           {selectedLabels.map((el) => (
-            <Button
-              key={el._id}
-              variant={"outline"}
-              className="space-x-[10px]"
-              size={"sm"}
-            >
-              <Tag size={17} />
-              <span>{el.name}</span>
-            </Button>
+            <LabelTagButton>{el.name}</LabelTagButton>
           ))}
           <LabelPopOver
             isLoading={getLabelsQuery.isFetchingNextPage}

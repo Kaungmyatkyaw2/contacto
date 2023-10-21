@@ -32,7 +32,7 @@ const Sidebar = ({ open, setOpen }: Props) => {
       <div
         ref={ref}
         className={`
-        lg:w-[25%] w-[90%] h-[100vh] overflow-y-auto overflow-x-hidden hide-scroll lg:border-none border-r lg:shadow-none shadow-lg bg-white z-[9] lg:pt-0 pb-[100px] pr-[20px] fixed left-0
+        lg:w-[25%] w-[90%] h-[100vh] overflow-y-auto overflow-x-hidden hide-scroll lg:border-none border-r lg:shadow-none shadow-lg bg-white z-[9] pt-[20px] pb-[100px] pr-[20px] fixed left-0
        lg:translate-x-0 ${
          open ? "translate-x-0" : "translate-x-[-100%]"
        } duration-500

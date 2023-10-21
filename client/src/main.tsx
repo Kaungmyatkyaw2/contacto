@@ -10,6 +10,7 @@ import {
   CreateContact,
   EditContact,
   LabelPage,
+  ContactPage,
 } from "./pages";
 import "./index.css";
 import HeadProvider from "./context/provider/HeadProvider";
@@ -38,9 +39,20 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             }
           >
             <Route path="" element={<Home />} />
+          </Route>
+          <Route
+            path="/contact"
+            element={
+              <LayoutProvider>
+                <Protect />
+              </LayoutProvider>
+            }
+          >
+            <Route path=":id" element={<ContactPage />} />
             <Route path="edit/:id" element={<EditContact />} />
             <Route path="create" element={<CreateContact />} />
           </Route>
+
           <Route
             path="/label"
             element={

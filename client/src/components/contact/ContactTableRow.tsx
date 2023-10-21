@@ -14,12 +14,17 @@ interface Prop {
 
 const ContactTableRow = ({ contact }: Prop) => {
   const deleteContact = useDeleteContact();
-  const [open, setOpen] = useState(false);
+  const [openDelDialog, setOpenDelDialog] = useState(false);
   const { toast } = useToast();
-  const navgiate = useNavigate();
+  const navigate = useNavigate();
 
-  const handleEdit = async () => {
-    navgiate(`/edit/${contact._id}`);
+  const handleEdit = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    navigate(`/contact/edit/${contact._id}`);
+  };
+  const handleDelete = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    setOpenDelDialog(true);
   };
 
   const confirmDelete = async () => {
@@ -39,12 +44,18 @@ const ContactTableRow = ({ contact }: Prop) => {
       },
     });
 
-    setOpen(false);
+    setOpenDelDialog(false);
   };
 
   return (
     <>
-      <TableRow key={contact._id} className="border-none cursor-pointer">
+      <TableRow
+        onClick={() => {
+          navigate(`/contact/${contact._id}`);
+        }}
+        key={contact._id}
+        className="border-none cursor-pointer"
+      >
         <TableCell className="font-medium py-[20px]">
           <div className="flex items-center space-x-[10px]">
             <Avatar>
@@ -71,14 +82,14 @@ const ContactTableRow = ({ contact }: Prop) => {
           <div className="flex justify-end items-center">
             <div className="flex items-center space-x-[15px]">
               <Pencil size={17} onClick={handleEdit} />
-              <Trash size={17} onClick={() => setOpen(true)} />
+              <Trash size={17} onClick={handleDelete} />
             </div>
           </div>
         </TableCell>
       </TableRow>
       <CustomAlertDialog
-        open={open}
-        setOpen={setOpen}
+        open={openDelDialog}
+        setOpen={setOpenDelDialog}
         title={`Are you sure to delete contact?`}
         description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
         isLoading={deleteContact.isLoading}

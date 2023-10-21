@@ -1,5 +1,6 @@
 import { ContactType } from "@/types/contact.types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Link } from "react-router-dom";
 
 interface Prop {
   contact: ContactType;
@@ -7,7 +8,10 @@ interface Prop {
 
 const ContactSearchRow = ({ contact }: Prop) => {
   return (
-    <div className="w-full hover:bg-gray-100 flex items-center space-x-[20px] py-[10px] px-[20px] cursor-pointer">
+    <Link
+      to={`/contact/${contact._id}`}
+      className="w-full hover:bg-gray-100 flex items-center space-x-[20px] py-[10px] px-[20px] cursor-pointer"
+    >
       <Avatar>
         {contact.photo && <AvatarImage src={contact.photo} alt="@shadcn" />}
         <AvatarFallback
@@ -18,7 +22,7 @@ const ContactSearchRow = ({ contact }: Prop) => {
         </AvatarFallback>
       </Avatar>
       <h1>{contact.name}</h1>
-    </div>
+    </Link>
   );
 };
 
