@@ -35,6 +35,8 @@ module.exports = class ApiFeatures {
     if (queryString.sort) {
       const sortStr = queryString.sort.replace(/,/g, " ");
       this.query.sort(sortStr);
+    } else {
+      this.query.sort("createdAt");
     }
 
     return this;

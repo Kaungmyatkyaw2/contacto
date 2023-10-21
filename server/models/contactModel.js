@@ -49,6 +49,10 @@ const ContactSchema = new mongoose.Schema({
       ref: "Label",
     },
   ],
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 ContactSchema.index({ name: 1, user: 1 }, { unique: true });
