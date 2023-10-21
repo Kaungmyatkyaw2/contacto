@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { LabelType } from "@/types/label.types";
 import { LabelPopOver } from "@/components/label";
 import { splitPagesData } from "@/lib/handleInfiniteScroll";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 interface FormValues {
   email: string;
@@ -24,20 +25,25 @@ export const CreateContact = () => {
   const [previewImage, setPreviewImage] = useState<null | string>(null);
   const [file, setFile] = useState<null | File>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const popoverRef = useRef<HTMLDivElement>(null);
 
+  const navigate = useNavigate();
+
+  const { toast } = useToast();
   const form = useForm<FormValues>();
   const { register, formState, handleSubmit, reset } = form;
   const { errors, isDirty, isValid } = formState;
 
   const createContactMutation = useCreateContact();
+
   const getLabelsQuery = useGetLabels();
   const labels = splitPagesData<LabelType>(getLabelsQuery.data) || [];
 
   const [tempLabels, setTempLabels] = useState<LabelType[]>([]);
   const [selectedLabels, setSelectedLabels] = useState<LabelType[]>([]);
   const tempLabelIds = tempLabels.map((el) => el._id);
+
+  useInfiniteScroll(popoverRef.current, getLabelsQuery, [getLabelsQuery]);
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
@@ -119,6 +125,8 @@ export const CreateContact = () => {
             </Button>
           ))}
           <LabelPopOver
+            isLoading={getLabelsQuery.isFetchingNextPage}
+            ref={popoverRef}
             onOpenChange={onLabelOpenChange}
             selectedLabels={selectedLabels}
             labels={labels}

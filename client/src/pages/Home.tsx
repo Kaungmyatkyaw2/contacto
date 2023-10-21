@@ -1,33 +1,13 @@
 import { ContactPanel } from "@/components/contact";
 import { useGetContacts } from "@/hooks/contacts.hook";
-import { handleInfinitScroll } from "@/lib/handleInfiniteScroll";
-import { useEffect, useRef } from "react";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import { useRef } from "react";
 
 export const Home = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const getConactsQuery = useGetContacts();
+  const query = useGetContacts();
 
-  useEffect(() => {
-    const element = ref.current;
+  useInfiniteScroll(ref.current, query);
 
-    if (!element) return;
-
-    const onScrollInfinite = async () => {
-      if (getConactsQuery.hasNextPage && !getConactsQuery.isFetchingNextPage) {
-        await getConactsQuery.fetchNextPage();
-      }
-    };
-    const [addEvent, removeEvent] = handleInfinitScroll(
-      onScrollInfinite,
-      element
-    );
-
-    addEvent();
-
-    return () => {
-      removeEvent();
-    };
-  }, [getConactsQuery.hasNextPage, getConactsQuery.isFetchingNextPage]);
-
-  return <ContactPanel query={getConactsQuery} ref={ref} />;
+  return <ContactPanel query={query} ref={ref} />;
 };

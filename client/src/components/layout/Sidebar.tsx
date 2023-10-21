@@ -3,14 +3,12 @@ import { Plus, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SidebarBtn from "./SidebarBtn";
 import { Button } from "../ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { LabelCreateDialog, LabelSidebarButton } from "../label";
 import { useGetLabels } from "@/hooks/labels.hooks";
 import { LabelType } from "@/types/label.types";
-import {
-  handleInfinitScroll,
-  splitPagesData,
-} from "@/lib/handleInfiniteScroll";
+import { splitPagesData } from "@/lib/handleInfiniteScroll";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 interface Props {
   open: boolean;
@@ -27,30 +25,7 @@ const Sidebar = ({ open, setOpen }: Props) => {
   const query = useGetLabels();
   const labels = splitPagesData<LabelType>(query.data) || [];
 
-  useEffect(() => {
-    const element = ref.current;
-
-    if (!element) return;
-
-    const onScrollInfinite = async () => {
-      const { hasNextPage, isFetchingNextPage, fetchNextPage } = query;
-
-      if (hasNextPage && !isFetchingNextPage) {
-        await fetchNextPage();
-      }
-    };
-
-    const [addEvent, removeEvent] = handleInfinitScroll(
-      onScrollInfinite,
-      element
-    );
-
-    addEvent();
-
-    return () => {
-      removeEvent();
-    };
-  }, [query.hasNextPage, query.isFetchingNextPage]);
+  useInfiniteScroll(ref.current, query);
 
   return (
     <>

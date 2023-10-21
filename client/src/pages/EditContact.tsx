@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetContact, useUpdateContact } from "@/hooks/contacts.hook";
 import { useGetLabels } from "@/hooks/labels.hooks";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { splitPagesData } from "@/lib/handleInfiniteScroll";
 import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
@@ -23,13 +24,17 @@ export const EditContact = () => {
   const [previewImage, setPreviewImage] = useState<null | string>(null);
   const [file, setFile] = useState<null | File>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
   const { toast } = useToast();
+
   const form = useForm<FormValues>();
   const { register, formState, handleSubmit, reset, setValue } = form;
   const { errors, isDirty, isValid } = formState;
 
   const navigate = useNavigate();
   const { id } = useParams();
+
   const updateContactoMutation = useUpdateContact();
   const getContactQuery = useGetContact(id?.toString() || "");
 
@@ -39,6 +44,8 @@ export const EditContact = () => {
   const [selectedLabels, setSelectedLabels] = useState<LabelType[]>([]);
   const [tempLabels, setTempLabels] = useState<LabelType[]>([]);
   const tempLabelIds = tempLabels.map((el) => el._id);
+
+  useInfiniteScroll(popoverRef.current, getLabelsQuery, [getLabelsQuery]);
 
   useEffect(() => {
     if (getContactQuery.data) {
@@ -120,13 +127,13 @@ export const EditContact = () => {
           className="hidden"
         />
         <button
-          className="bg-blue-200 hover:opacity-75 rounded-full cursor-pointer h-[150px] w-[150px] flex justify-center items-center"
+          className="bg-blue-200 hover:opacity-75 rounded-full cursor-pointer min-h-[150px] min-w-[150px] flex justify-center items-center"
           style={{ backgroundImage: `url("${previewImage}")` }}
           onClick={() => fileRef.current?.click()}
         >
           <Camera size={35} />
         </button>
-        <div className="flex flex-wrap  items-center space-x-[15px]">
+        <div className="flex flex-wrap items-center space-x-[15px] w-full">
           {selectedLabels.map((el) => (
             <Button
               key={el._id}
@@ -139,6 +146,8 @@ export const EditContact = () => {
             </Button>
           ))}
           <LabelPopOver
+            isLoading={getLabelsQuery.isFetchingNextPage}
+            ref={popoverRef}
             onOpenChange={onLabelOpenChange}
             selectedLabels={selectedLabels}
             labels={labels}

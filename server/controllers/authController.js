@@ -50,7 +50,9 @@ const createSendVerifyEmailToken = async (
       "host"
     )}/users/verifyEmail/${verifyToken}`;
 
-    await new Email(user, verifyEmailUrl).sendVerifyEmailLink();
+    const verifyEmailForClient = `${req.headers.origin}/verfiyEmail?token=${verifyToken}`;
+
+    await new Email(user, verifyEmailForClient).sendVerifyEmailLink();
     res.status(200).json({
       status: "success",
       message:
