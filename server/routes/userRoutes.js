@@ -13,7 +13,7 @@ Router.post(
   userImgUploader.uploadToCloudinary(),
   authController.signup
 );
-Router.post("/verifyEmail/:token", authController.verfiyEmail);
+Router.post("/verifyEmail/:token", authController.verifyEmail);
 Router.post("/getVerifyEmailUrl", authController.getVerifyEmailUrl);
 Router.post("/login", authController.login);
 

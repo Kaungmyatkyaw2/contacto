@@ -16,13 +16,13 @@ const Protect = () => {
       dispatch({ type: "setUser", user: response.data.data.data });
       setLoading(false);
     } catch (error) {
-      dispatch({ type: "setUser", user: undefined });
+      dispatch({ type: "loginError" });
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!auth?.user?._id) {
+    if (!auth?.user?._id && auth?.token) {
       getMe();
     } else {
       setLoading(false);

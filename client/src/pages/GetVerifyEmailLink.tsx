@@ -7,33 +7,23 @@ import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/signin_up";
 import { ContactoIcon, LoadingButton } from "@/sharers/other";
 import { useToast } from "@/components/ui/use-toast";
-import { useSignup } from "@/hooks/user.hooks";
+import { useGetVerifyEmailLink } from "@/hooks/user.hooks";
 
 interface FormValues {
-  name: string;
   email: string;
-  password: string;
-  passwordConfirm: string;
 }
 
-export const Signup = () => {
+export const GetVerifyEmailLink = () => {
   const { toast } = useToast();
   const form = useForm<FormValues>();
   const { register, formState, handleSubmit } = form;
   const { errors, isDirty, isValid } = formState;
 
-  const signupMutation = useSignup();
+  const getVerifyEmailLink = useGetVerifyEmailLink();
 
   const onSubmit = async (values: FormValues) => {
-    const data = new FormData();
-
-    data.append("email", values.email);
-    data.append("password", values.password);
-    data.append("passwordConfirm", values.passwordConfirm);
-    data.append("name", values.name);
-
     //@ts-ignore
-    await signupMutation.mutateAsync(data, {
+    await getVerifyEmailLink.mutateAsync(values, {
       onSuccess: (response) => {
         toast({
           title: "Verification email send !",
@@ -42,7 +32,7 @@ export const Signup = () => {
       },
       onError: (error: any) => {
         toast({
-          title: "Failed to sign up.",
+          title: "Failed to get vierfy email link.",
           description: error.response.data.message,
           variant: "destructive",
         });
@@ -50,14 +40,13 @@ export const Signup = () => {
     });
   };
 
-
   return (
     <div className="w-full h-[100vh] md:py-0 py-[20px] sm:px-0 px-[10px]">
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <div>
           <ContactoIcon />
           <h1 className="text-[18px] font-extrabold pt-[10px]">
-            Sign up and start explore!
+            Verify your email!
           </h1>
         </div>
         <LabeledInput
@@ -73,61 +62,17 @@ export const Signup = () => {
             required: setRequired("Email is required."),
           })}
         />
-        <LabeledInput
-          id="name"
-          type="text"
-          required={true}
-          placeholder="Jhon Doe"
-          label="Name"
-          isError={errors.name}
-          error={errors.name?.message}
-          {...register("name", {
-            required: setRequired("Name is required."),
-          })}
-        />
-        <LabeledInput
-          id="password"
-          type="password"
-          required={true}
-          placeholder="your password"
-          label="Password"
-          isError={errors.password}
-          error={errors.password?.message}
-          {...register("password", {
-            required: setRequired("Password is required."),
-            minLength: {
-              value: 4,
-              message: "Password must be 4 length minium.",
-            },
-          })}
-        />
 
-        <LabeledInput
-          id="passwordConfirm"
-          type="password"
-          required={true}
-          placeholder="Confirm your password"
-          label="Confirm Password"
-          isError={errors.passwordConfirm}
-          error={errors.passwordConfirm?.message}
-          {...register("passwordConfirm", {
-            required: setRequired("Confirm Password is required."),
-            minLength: {
-              value: 8,
-              message: "Password must be 4 length minium.",
-            },
-          })}
-        />
         <LoadingButton
-          loading={signupMutation.isLoading}
+          loading={getVerifyEmailLink.isLoading}
           disabled={isDirty && !isValid}
           type="submit"
           className="w-full py-[30px] rounded-[100px]"
         >
-          Create Account
+          Verify
         </LoadingButton>
         <p className="text-ink text-center text-[13px]">
-          Already have an account ?{" "}
+          Already have an verified account ?{" "}
           <Link className="underline" to={"/login"}>
             Log in here.
           </Link>

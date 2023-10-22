@@ -50,7 +50,7 @@ const createSendVerifyEmailToken = async (
       "host"
     )}/users/verifyEmail/${verifyToken}`;
 
-    const verifyEmailForClient = `${req.headers.origin}/verfiyEmail?token=${verifyToken}`;
+    const verifyEmailForClient = `${req.headers.origin}/verifyEmail?token=${verifyToken}`;
 
     await new Email(user, verifyEmailForClient).sendVerifyEmailLink();
     res.status(200).json({
@@ -59,6 +59,7 @@ const createSendVerifyEmailToken = async (
         "The verify email link is already sent to your email. Please Check the email!",
     });
   } catch (error) {
+    console.log(error);
     user.verifyEmailToken = undefined;
     user.verifyEmailTokenExpires = undefined;
     await user.save({ validateBeforeSave: false });
@@ -96,7 +97,7 @@ exports.getVerifyEmailUrl = catchAsync(async (req, res, next) => {
   await createSendVerifyEmailToken(verifyToken, user, req, res, next);
 });
 
-exports.verfiyEmail = catchAsync(async (req, res, next) => {
+exports.verifyEmail = catchAsync(async (req, res, next) => {
   const token = req.params.token;
   const verifyToken = crypto.createHash("sha256").update(token).digest("hex");
 

@@ -1,7 +1,7 @@
 import { LabeledInput } from "@/sharers/form";
 import { useForm } from "react-hook-form";
 import { emailPattern, setRequired } from "@/validation";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/signin_up";
 import axiosClient from "@/lib/axiosClient";
 import { ContactoIcon, LoadingButton } from "@/sharers/other";
@@ -20,7 +20,7 @@ export const Login = () => {
   const { register, formState, handleSubmit } = form;
   const { errors, isDirty, isValid } = formState;
   const [loading, setLoading] = useState(false);
-  const { dispatch, state: auth } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -38,9 +38,7 @@ export const Login = () => {
     }
   };
 
-  return auth?.token ? (
-    <Navigate to={"/"} />
-  ) : (
+  return (
     <div className="w-full h-[100vh] md:py-0 py-[20px] sm:px-0 px-[10px]">
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -94,6 +92,12 @@ export const Login = () => {
             Create here.
           </Link>
         </p>
+        <Link
+          className="text-ink block w-full text-center text-[13px] underline"
+          to={"/getVerifyEmailLink"}
+        >
+          Verify Your Email
+        </Link>
       </FormWrapper>
     </div>
   );

@@ -1,31 +1,44 @@
 import { toast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/context/provider/AuthContextProvider";
-import axiosClient from "@/lib/axiosClient";
+import { useVerifyEmail } from "@/hooks/user.hooks";
 import { ContactoIcon, LoadingButton } from "@/sharers/other";
 import { useContext } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 export const VerifyEmail = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const { dispatch } = useContext(AuthContext);
 
+  const verifyEmailMutation = useVerifyEmail();
+
   const handleVerify = async () => {
-    try {
-      const response = await axiosClient().post(
-        `/users/verifyEmail/${searchParams.get("token")}`
-      );
-      dispatch({ type: "setToken", token: response.data.token });
-      navigate("/");
-    } catch (error: any) {
-      toast({
-        title: "Failed to verify your email.",
-        description: error.response.data.message,
-        variant: "destructive",
-      });
-    }
+    await verifyEmailMutation.mutateAsync(searchParams.get("token"), {
+      onSuccess: (response) => {
+        dispatch({ type: "setToken", token: response.token });
+        navigate("/");
+      },
+      onError: (error: any) => {
+        toast({
+          title: "Failed to verify your email.",
+          description: error.response.data.message,
+          variant: "destructive",
+        });
+      },
+    });
   };
+
+  if (!searchParams.get("token")) {
+    return (
+      <div className="w-full h-[100vh] flex flex-col items-center justify-center">
+        <ContactoIcon />
+        <h1 className="text-[18px] font-extrabold pt-[5px] pb-[5px]">Invalid Token</h1>
+        <Link to={"/login"} className="text-sm underline">
+          Go back to login page.
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-[100vh] flex items-center justify-center">
@@ -41,6 +54,7 @@ export const VerifyEmail = () => {
         <div className="flex justify-center pt-[20px]">
           <LoadingButton
             onClick={handleVerify}
+            loading={verifyEmailMutation.isLoading}
             className="bg-ink rounded-[100px] mx-auto"
           >
             Verify Email

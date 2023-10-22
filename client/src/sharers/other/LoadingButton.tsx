@@ -12,7 +12,11 @@ export const LoadingButton = ({
   ...rest
 }: Props) => {
   return (
-    <Button {...rest} className={`relative ${className}`}>
+    <Button
+      disabled={loading || rest.disabled}
+      {...rest}
+      className={`relative ${className}`}
+    >
       <span
         className={`${
           loading ? "opacity-0" : "opacity-1"

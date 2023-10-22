@@ -12,11 +12,13 @@ import {
   LabelPage,
   ContactPage,
   ProfilePage,
+  GetVerifyEmailLink,
 } from "./pages";
 import "./index.css";
 import HeadProvider from "./context/provider/HeadProvider";
 import Protect from "./components/auth/Protect";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import NavigateHome from "./components/auth/NavigateHome";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +44,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="" element={<Home />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
+
+          <Route path="/" element={<NavigateHome />}>
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="/verifyEmail" element={<VerifyEmail />} />
+            <Route
+              path="/getVerifyEmailLink"
+              element={<GetVerifyEmailLink />}
+            />
+          </Route>
+
           <Route
             path="/contact"
             element={
@@ -65,9 +78,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           >
             <Route path=":id" element={<LabelPage />} />
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/verfiyEmail" element={<VerifyEmail />} />
         </Routes>
       </BrowserRouter>
       <Toaster />

@@ -34,6 +34,12 @@ const reducer = (
       return state;
       break;
 
+    case "loginError":
+      localStorage.removeItem("jwt_token");
+      state = { ...state, user: null, token: undefined };
+      return state;
+      break;
+
     case "logOut":
       localStorage.removeItem("jwt_token");
       state = { ...state, token: undefined, user: null };
