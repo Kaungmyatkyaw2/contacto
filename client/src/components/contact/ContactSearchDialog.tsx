@@ -11,13 +11,18 @@ import { DialogProps } from "@radix-ui/react-dialog";
 import { useDeferredValue, useEffect, useState } from "react";
 import ContactSearchRow from "./ContactSearchRow";
 
-interface Prop extends DialogProps {}
+interface Prop extends DialogProps {
+  onChooseContact: () => void;
+}
 
-export const ContactSearchDialog = ({ ...props }: Prop) => {
+export const ContactSearchDialog = ({
+  onChooseContact = () => {},
+  ...props
+}: Prop) => {
   const [search, setSearch] = useState<string>("");
   const searchValue = useDeferredValue(search);
 
-  const { data } = useSearchContacts(searchValue);
+  const { data, isLoading } = useSearchContacts(searchValue);
   const contacts: ContactType[] = data?.data?.data || [];
 
   useEffect(() => {
@@ -27,7 +32,9 @@ export const ContactSearchDialog = ({ ...props }: Prop) => {
     <Dialog {...props}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-start">Share Conacts</DialogTitle>
+          <DialogTitle className="text-start">
+            {isLoading ? "Searching..." : "Search Conacts"}
+          </DialogTitle>
         </DialogHeader>
         <div className="flex items-center space-x-2">
           <div className="grid flex-1 gap-2">
@@ -40,7 +47,7 @@ export const ContactSearchDialog = ({ ...props }: Prop) => {
             />
             <div className="bg-white">
               {contacts.map((contact) => (
-                <ContactSearchRow key={contact._id} contact={contact} />
+                <ContactSearchRow onClick={onChooseContact} key={contact._id} contact={contact} />
               ))}
             </div>
           </div>

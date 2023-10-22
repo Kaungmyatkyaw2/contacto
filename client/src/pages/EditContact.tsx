@@ -6,9 +6,10 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { splitPagesData } from "@/lib/handleInfiniteScroll";
 import { IconInput } from "@/sharers/form";
 import { LoadingButton } from "@/sharers/other";
+import { PhotoInput } from "@/sharers/other/PhotoInput";
 import { LabelType } from "@/types/label.types";
 import { emailPattern, setRequired } from "@/validation";
-import { Camera, Loader, MailIcon, Phone, User } from "lucide-react";
+import { Loader, MailIcon, Phone, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,7 +23,6 @@ interface FormValues {
 export const EditContact = () => {
   const [previewImage, setPreviewImage] = useState<null | string>(null);
   const [file, setFile] = useState<null | File>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
@@ -127,23 +127,11 @@ export const EditContact = () => {
   return (
     <div className="w-full relative">
       <div className="w-full py-[30px] border-b flex md:flex-row flex-col md:items-center md:space-x-[30px] md:space-y-0 space-y-[20px] md:pl-0 pl-[30px]">
-        <input
-          onChange={handleSelectFile}
-          accept="image/*"
-          ref={fileRef}
-          type="file"
-          className="hidden"
-        />
-        <button
-          className="bg-blue-200 hover:opacity-75 rounded-full cursor-pointer min-h-[150px] min-w-[150px] max-w-[150px] flex justify-center items-center"
-          style={{ backgroundImage: `url("${previewImage}")` }}
-          onClick={() => fileRef.current?.click()}
-        >
-          <Camera size={35} />
-        </button>
+        <PhotoInput img={previewImage || ""} onChange={handleSelectFile} />
+
         <div className="flex flex-wrap items-center gap-4 w-full">
           {selectedLabels.map((el) => (
-            <LabelTagButton>{el.name}</LabelTagButton>
+            <LabelTagButton key={el._id}>{el.name}</LabelTagButton>
           ))}
           <LabelPopOver
             isLoading={getLabelsQuery.isFetchingNextPage}

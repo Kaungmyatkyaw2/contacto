@@ -27,7 +27,7 @@ export const LabeledInput = React.forwardRef<
         required={required}
         type={type}
         id={id}
-        className="py-[20px] border-[1.5px]"
+        className={`py-[20px] border-[1.5px] ${props.className}`}
         placeholder={props.placeholder}
         {...props}
         ref={ref}

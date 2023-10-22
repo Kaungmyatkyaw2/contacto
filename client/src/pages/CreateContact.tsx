@@ -118,7 +118,7 @@ export const CreateContact = () => {
         </button>
         <div className="flex flex-wrap items-center gap-4 w-full">
           {selectedLabels.map((el) => (
-            <LabelTagButton>{el.name}</LabelTagButton>
+            <LabelTagButton key={el._id}>{el.name}</LabelTagButton>
           ))}
           <LabelPopOver
             isLoading={getLabelsQuery.isFetchingNextPage}

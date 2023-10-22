@@ -1,33 +1,30 @@
-import { createContext, useReducer } from 'react'
-
-
-interface userType {
-  _id: string
-  name: string
-  email: string
-  photo: string
-}
+import { UserType } from "@/types/user.types";
+import { createContext, useReducer } from "react";
 
 interface stateType {
-  token: undefined | string
-  user: userType | null
+  token: undefined | string;
+  user: UserType | null;
 }
 
 interface authContextType {
   state: stateType | null;
-  dispatch: React.Dispatch<{ type: any; token?: string | undefined; user?: userType }> | any
+  dispatch:
+    | React.Dispatch<{ type: any; token?: string | undefined; user?: UserType }>
+    | any;
 }
 
 export const AuthContext = createContext<authContextType>({
   state: null,
-  dispatch: null
+  dispatch: null,
 });
 
-const reducer = (state: stateType, action: { type: any, token?: string, user?: userType }) => {
-
+const reducer = (
+  state: stateType,
+  action: { type: any; token?: string; user?: UserType }
+) => {
   switch (action.type) {
     case "setToken":
-      localStorage.setItem("jwt_token", action.token || "")
+      localStorage.setItem("jwt_token", action.token || "");
       state = { ...state, token: action.token };
       return state;
       break;
@@ -37,9 +34,8 @@ const reducer = (state: stateType, action: { type: any, token?: string, user?: u
       return state;
       break;
 
-
     case "logOut":
-      localStorage.removeItem("jwt_token")
+      localStorage.removeItem("jwt_token");
       state = { ...state, token: undefined, user: null };
       return state;
       break;
@@ -47,19 +43,20 @@ const reducer = (state: stateType, action: { type: any, token?: string, user?: u
     default:
       return state;
   }
-
-}
+};
 
 const initialState = {
   token: localStorage.getItem("jwt_token") || undefined,
-  user: null
-}
+  user: null,
+};
 
 const AuthContextProvider = ({ children }: React.HTMLProps<HTMLDivElement>) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>
-  )
-}
+    <AuthContext.Provider value={{ state, dispatch }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-export default AuthContextProvider
+export default AuthContextProvider;

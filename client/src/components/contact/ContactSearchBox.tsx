@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Loader, Search } from "lucide-react";
 import { useDeferredValue, useState } from "react";
 import { Input } from "../ui/input";
 import { ContactType } from "@/types/contact.types";
@@ -9,14 +9,18 @@ export const ContactSearchBox = () => {
   const [search, setSearch] = useState<string>("");
   const searchValue = useDeferredValue(search);
 
-  const { data } = useSearchContacts(searchValue);
+  const { data, isLoading } = useSearchContacts(searchValue);
 
   const contacts: ContactType[] = data?.data?.data || [];
 
   return (
     <div className="rounded-lg flex items-center relative border">
       <div className="pl-[20px]">
-        <Search className="text-gray-500" size={18} />
+        {isLoading ? (
+          <Loader className="animate-spin" size={18} />
+        ) : (
+          <Search className="text-gray-500" size={18} />
+        )}
       </div>
       <Input
         onChange={(e) => {

@@ -27,7 +27,13 @@ export const Navbar = ({
   const dropdownContents = [
     {
       menus: [
-        { name: "Profile", icon: UserCircle },
+        {
+          name: "Profile",
+          icon: UserCircle,
+          onClick: () => {
+            navigate("/profile");
+          },
+        },
         { name: "Setting", icon: SettingsIcon },
         {
           name: "Log out",
@@ -66,7 +72,7 @@ export const Navbar = ({
               }}
               variant={"outline"}
               size={"icon"}
-              className="rounded-full md:hidden flex"
+              className="rounded-full md:hidden flex sm:border border-none"
             >
               <SearchIcon className="h-4 w-4" />
             </Button>
@@ -85,6 +91,9 @@ export const Navbar = ({
       </div>
 
       <ContactSearchDialog
+        onChooseContact={() => {
+          setOpenSearchDialog(false);
+        }}
         open={openSearchDialog}
         onOpenChange={setOpenSearchDialog}
       />

@@ -11,6 +11,7 @@ import {
   EditContact,
   LabelPage,
   ContactPage,
+  ProfilePage,
 } from "./pages";
 import "./index.css";
 import HeadProvider from "./context/provider/HeadProvider";
@@ -39,6 +40,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             }
           >
             <Route path="" element={<Home />} />
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
           <Route
             path="/contact"

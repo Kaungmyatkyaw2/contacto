@@ -12,7 +12,7 @@ export const LayoutProvider = ({
       <Navbar setOpen={setOpen} />
       <div className="mt-[60px] lg:pt-[20px] w-full flex">
         <Sidebar open={open} setOpen={setOpen} />
-        <div className="lg:w-[75%] w-full lg:ml-[25%] ml-0 ">
+        <div className="lg:w-[75%] w-full lg:ml-[25%] ml-0 lg:pl-[20px] ">
           {children}
         </div>
       </div>

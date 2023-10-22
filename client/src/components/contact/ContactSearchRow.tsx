@@ -4,11 +4,15 @@ import { Link } from "react-router-dom";
 
 interface Prop {
   contact: ContactType;
+  onClick?: () => void;
 }
 
-const ContactSearchRow = ({ contact }: Prop) => {
+const ContactSearchRow = ({ contact, onClick = () => {} }: Prop) => {
   return (
     <Link
+      onClick={() => {
+        onClick();
+      }}
       to={`/contact/${contact._id}`}
       className="w-full hover:bg-gray-100 flex items-center space-x-[20px] py-[10px] px-[20px] cursor-pointer"
     >

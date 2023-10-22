@@ -6,3 +6,4 @@ export * from "./CreateContact";
 export * from "./EditContact";
 export * from "./LabelPage";
 export * from "./ContactPage";
+export * from "./ProfilePage"
