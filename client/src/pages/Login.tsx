@@ -73,7 +73,7 @@ export const Login = () => {
             required: setRequired("Password is required."),
             minLength: {
               value: 8,
-              message: "Password must be 4 length minium.",
+              message: "Password must be 8 length minium.",
             },
           })}
         />
@@ -86,18 +86,29 @@ export const Login = () => {
         >
           Log in
         </LoadingButton>
-        <p className="text-ink text-center text-[13px]">
-          Haven't had an account yet ?{" "}
-          <Link className="underline" to={"/signup"}>
-            Create here.
-          </Link>
-        </p>
-        <Link
-          className="text-ink block w-full text-center text-[13px] underline"
-          to={"/getVerifyEmailLink"}
-        >
-          Verify Your Email
-        </Link>
+        <div>
+          <p className="text-ink text-center text-[13px]">
+            Haven't had an account yet ?{" "}
+            <Link className="underline" to={"/signup"}>
+              Create here.
+            </Link>
+          </p>
+          <div className="flex items-center justify-center space-x-[10px] pt-[5px]">
+            <Link
+              className="text-ink block text-center text-[12px] underline"
+              to={"/getVerifyEmailLink"}
+            >
+              Verify Your Email
+            </Link>
+            <span>|</span>
+            <Link
+              className="text-ink block text-center text-[12px] underline"
+              to={"/forgotPassword"}
+            >
+              Forgot your password?
+            </Link>
+          </div>
+        </div>
       </FormWrapper>
     </div>
   );

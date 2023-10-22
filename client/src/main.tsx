@@ -11,8 +11,10 @@ import {
   EditContact,
   LabelPage,
   ContactPage,
-  ProfilePage,
+  SettingPage,
   GetVerifyEmailLink,
+  ForgotPassword,
+  ResetPassword,
 } from "./pages";
 import "./index.css";
 import HeadProvider from "./context/provider/HeadProvider";
@@ -42,17 +44,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             }
           >
             <Route path="" element={<Home />} />
-            <Route path="profile" element={<ProfilePage />} />
+            <Route path="setting" element={<SettingPage />} />
           </Route>
 
           <Route path="/" element={<NavigateHome />}>
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
-            <Route path="/verifyEmail" element={<VerifyEmail />} />
-            <Route
-              path="/getVerifyEmailLink"
-              element={<GetVerifyEmailLink />}
-            />
+            <Route path="forgotPassword" element={<ForgotPassword />} />
+            <Route path="resetPassword" element={<ResetPassword />} />
+            <Route path="verifyEmail" element={<VerifyEmail />} />
+            <Route path="getVerifyEmailLink" element={<GetVerifyEmailLink />} />
           </Route>
 
           <Route

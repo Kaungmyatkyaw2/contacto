@@ -17,6 +17,9 @@ Router.post("/verifyEmail/:token", authController.verifyEmail);
 Router.post("/getVerifyEmailUrl", authController.getVerifyEmailUrl);
 Router.post("/login", authController.login);
 
+Router.post("/forgotPassword", authController.forgotPassword);
+Router.post("/resetPassword/:token", authController.resetPassword);
+
 Router.use(authController.protect);
 Router.patch("/updateMyPassword", authController.updateMyPassword);
 Router.patch(
@@ -26,7 +29,5 @@ Router.patch(
   userController.updateMe
 );
 Router.get("/me", userController.getMe, userController.getUser);
-Router.post("/forgotPassword", authController.forgotPassword);
-Router.post("/resetPassword/:token", authController.resetPassword);
 
 module.exports = Router;

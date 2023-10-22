@@ -42,7 +42,7 @@ export const LabelSidebarButton = ({
 
   const handleDelete = async () => {
     //@ts-ignore
-    await deleteLableMutation.mutate(label._id, {
+    await deleteLableMutation.mutateAsync(label._id, {
       onSuccess: () => {
         toast({
           title: "Successfully delete a label!",

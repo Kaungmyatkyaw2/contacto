@@ -1,12 +1,6 @@
 import { ContactoIcon, DropDown } from "@/sharers/other";
 import { Button } from "../ui/button";
-import {
-  LogOutIcon,
-  Menu,
-  SearchIcon,
-  SettingsIcon,
-  UserCircle,
-} from "lucide-react";
+import { LogOutIcon, Menu, SearchIcon, SettingsIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
@@ -28,13 +22,12 @@ export const Navbar = ({
     {
       menus: [
         {
-          name: "Profile",
-          icon: UserCircle,
+          name: "Setting",
+          icon: SettingsIcon,
           onClick: () => {
-            navigate("/profile");
+            navigate("/setting");
           },
         },
-        { name: "Setting", icon: SettingsIcon },
         {
           name: "Log out",
           icon: LogOutIcon,

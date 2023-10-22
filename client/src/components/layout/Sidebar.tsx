@@ -42,7 +42,7 @@ const Sidebar = ({ open, setOpen }: Props) => {
           <LoadingButton
             className="py-[24px] px-[20px] rounded-[100px]"
             onClick={() => {
-              navigate("/create");
+              navigate("/contact/create");
               setOpen(false);
             }}
           >

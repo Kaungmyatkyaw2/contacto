@@ -6,5 +6,7 @@ export * from "./CreateContact";
 export * from "./EditContact";
 export * from "./LabelPage";
 export * from "./ContactPage";
-export * from "./ProfilePage";
+export * from "./SettingPage";
 export * from "./GetVerifyEmailLink";
+export * from "./ForgotPassword";
+export * from "./ResetPassword";

@@ -1,21 +1,17 @@
 import { toast } from "@/components/ui/use-toast";
-import { AuthContext } from "@/context/provider/AuthContextProvider";
 import { useVerifyEmail } from "@/hooks/user.hooks";
 import { ContactoIcon, LoadingButton } from "@/sharers/other";
-import { useContext } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 export const VerifyEmail = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { dispatch } = useContext(AuthContext);
 
   const verifyEmailMutation = useVerifyEmail();
 
   const handleVerify = async () => {
     await verifyEmailMutation.mutateAsync(searchParams.get("token"), {
-      onSuccess: (response) => {
-        dispatch({ type: "setToken", token: response.token });
+      onSuccess: () => {
         navigate("/");
       },
       onError: (error: any) => {
@@ -32,7 +28,9 @@ export const VerifyEmail = () => {
     return (
       <div className="w-full h-[100vh] flex flex-col items-center justify-center">
         <ContactoIcon />
-        <h1 className="text-[18px] font-extrabold pt-[5px] pb-[5px]">Invalid Token</h1>
+        <h1 className="text-[18px] font-extrabold pt-[5px] pb-[5px]">
+          Invalid Token
+        </h1>
         <Link to={"/login"} className="text-sm underline">
           Go back to login page.
         </Link>
