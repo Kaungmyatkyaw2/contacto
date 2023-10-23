@@ -36,7 +36,7 @@ export const LabeledInput = React.forwardRef<
           {...props}
           type={type}
         />
-        {type == "password" ? (
+        {props.type == "password" ? (
           <span className="absolute right-[10px] top-[50%] translate-y-[-50%] cursor-pointer">
             {type == "text" ? (
               <EyeIcon
