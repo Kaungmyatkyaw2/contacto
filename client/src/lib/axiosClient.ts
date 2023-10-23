@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosClient = () =>
   axios.create({
-    baseURL: "http://localhost:3000/",
+    baseURL: process.env.REACT_APP_API_URL,
     timeoutErrorMessage: "The request time out at this point.",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("jwt_token"),
