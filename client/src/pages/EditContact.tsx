@@ -115,7 +115,7 @@ export const EditContact = () => {
     }
   };
 
-  if (getContactQuery.isLoading) {
+  if (getContactQuery.isLoading || getLabelsQuery.isLoading) {
     return (
       <div className="w-full h-[calc(100vh-100px)] space-y-[5px] flex flex-col items-center justify-center">
         <Loader className="animate-spin" size={30} />

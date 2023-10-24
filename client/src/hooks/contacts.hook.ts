@@ -109,6 +109,25 @@ export const useUpdateContact = () => {
       axiosClient().patch(`/contacts/${id}`, values),
     onSuccess: (res) => {
       const data: ContactType = res.data.data.data;
+
+      const ids = data.labels.map((i) => i);
+
+      ids.forEach((el) => {
+        let prevLabelContacts: InfiniteQueryResponse<ContactType> | undefined =
+          queryClient.getQueryData(["contacts", "labels", el]);
+
+        if (prevLabelContacts) {
+          prevLabelContacts = updatedQueryResponseArrayData<ContactType>(
+            prevLabelContacts,
+            data
+          );
+          queryClient.setQueryData(
+            ["contacts", "labels", el],
+            prevLabelContacts
+          );
+        }
+      });
+
       let prevCachedContacts: InfiniteQueryResponse<ContactType> | undefined =
         queryClient.getQueryData(["contacts"]);
 
@@ -129,15 +148,35 @@ export const useDeleteContact = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id) => axiosClient().delete(`/contacts/${id}`),
-    onSuccess: (_, varaiables: any) => {
+    mutationFn: (contact: ContactType) =>
+      axiosClient().delete(`/contacts/${contact._id}`),
+    onSuccess: (_, contact: ContactType) => {
+      const ids = contact.labels.map((i) => i);
+
+      ids.forEach((id) => {
+        let prevLabelContacts: InfiniteQueryResponse<ContactType> | undefined =
+          queryClient.getQueryData(["contacts", "labels", id]);
+
+        if (prevLabelContacts) {
+          prevLabelContacts = filteredQueryResponseArrayData(
+            prevLabelContacts,
+            contact._id || ""
+          );
+
+          queryClient.setQueryData(
+            ["contacts", "labels", id],
+            prevLabelContacts
+          );
+        }
+      });
+
       let prevCachedContacts: InfiniteQueryResponse<ContactType> | undefined =
         queryClient.getQueryData(["contacts"]);
 
       if (prevCachedContacts) {
         prevCachedContacts = filteredQueryResponseArrayData(
           prevCachedContacts,
-          varaiables || ""
+          contact._id || ""
         );
       }
 

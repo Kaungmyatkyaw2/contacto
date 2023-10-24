@@ -21,13 +21,13 @@ export const ContactPage = () => {
   const contact: ContactType = query.data;
 
   const confirmDelete = async () => {
-    //@ts-ignore
-    await deleteContactMutation.mutateAsync(contact._id, {
+    await deleteContactMutation.mutateAsync(contact, {
       onSuccess: () => {
         toast({
           title: "Successfully delete a contact!",
         });
       },
+      //@ts-ignore
       onError(error: AxiosError) {
         toast({
           //@ts-ignore

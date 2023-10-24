@@ -58,7 +58,6 @@ const ContactSchema = new mongoose.Schema({
 ContactSchema.index({ name: 1, user: 1 }, { unique: true });
 
 ContactSchema.path("labels").validate(function (value) {
-  console.log(value);
   if (!value.length) {
     return true;
   }

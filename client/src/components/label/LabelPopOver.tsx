@@ -52,9 +52,9 @@ export const LabelPopOver = forwardRef(
           </PopoverTrigger>
           <PopoverContent
             ref={ref}
-            className="w-[150px] p-0 h-[300px] overflow-auto hide-scroll"
+            className="w-[150px] p-0 max-h-[300px] overflow-auto hide-scroll relative"
           >
-            <div className="">
+            <div className="pb-[50px]">
               {labels.map((el) => (
                 <div
                   key={el._id}
@@ -67,10 +67,17 @@ export const LabelPopOver = forwardRef(
                   <span>{el.name}</span>
                 </div>
               ))}
+              {!labels.length ? (
+                <p className="w-full px-[15px] py-[10px] text-center">
+                  No Label
+                </p>
+              ) : (
+                <></>
+              )}
               {isLoading ? <HorizontalLoader /> : <></>}
               <div
                 onClick={onApply}
-                className="w-full px-[15px] py-[10px] cursor-pointer text-sm hover:bg-gray-50 text-center"
+                className="w-full px-[15px] py-[10px] cursor-pointer text-sm hover:bg-gray-50 text-center fixed bottom-0 inset-x-0 bg-white"
               >
                 <span className="text-[blue] font-medium">Apply</span>
               </div>

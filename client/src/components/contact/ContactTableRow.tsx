@@ -28,17 +28,17 @@ const ContactTableRow = ({ contact }: Prop) => {
   };
 
   const confirmDelete = async () => {
-    //@ts-ignore
-    await deleteContact.mutateAsync(contact._id, {
+    await deleteContact.mutateAsync(contact, {
       onSuccess: () => {
         toast({
           title: "Successfully delete a contact!",
         });
       },
+      //@ts-ignore
       onError(error: AxiosError) {
         toast({
           //@ts-ignore
-          title: error.response?.data.message,
+          title: error.response?.data?.message,
           variant: "destructive",
         });
       },
