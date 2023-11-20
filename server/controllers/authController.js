@@ -43,7 +43,7 @@ const createSendVerifyEmailToken = async (
 ) => {
   try {
     if (user.verifiedEmail) {
-      return next("Email is already verified.", 400);
+      return next(new AppError("Email is already verified.", 400));
     }
 
     const verifyEmailUrl = `${req.protocol}://${req.get(
@@ -89,7 +89,7 @@ exports.getVerifyEmailUrl = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    return next("This user is no longer exist.", 400);
+    return next(new AppError("This user is no longer exist.", 400));
   }
 
   const verifyToken = user.createVerificationToken();
