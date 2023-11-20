@@ -151,7 +151,7 @@ exports.updateMyPassword = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(userId).select("+password");
 
   if (!currentUser) {
-    return next("This user is no longer exist.", 400);
+    return next(new AppError("This user is no longer exist.", 400));
   }
 
   const isPasswordCorrect = await currentUser.checkPassword(
